@@ -17,6 +17,12 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		command = readline("minishell> ");
-		printf("%s\n", command);
+		printf("%s\n", command); // to delete
+		// create history
+		// parsing
+		// execution
 	}
+	// rl_clear_history();
+	// free
+	return (0);
 }

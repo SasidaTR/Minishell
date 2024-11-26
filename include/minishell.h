@@ -3,6 +3,7 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <stdbool.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -10,5 +11,7 @@
 // {
 
 // }				t_data;
+
+int	ft_strlen(char *str);
 
 #endif

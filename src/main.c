@@ -7,16 +7,20 @@ void	initialize(int argc, char **argv, char **env)
 	(void)env;
 }
 
-int	main(int argc, char **argv, char **env)
+int loop()
 {
-	// t_data data;
-	char	*command;
-
-	initialize(argc, argv, env);
-	// make env
+	char *command;
 	while (1)
 	{
 		command = readline("minishell> ");
 		printf("%s\n", command);
 	}
+}
+
+int	main(int argc, char **argv, char **env)
+{
+	// t_data data;
+
+	initialize(argc, argv, env);
+	return(loop());
 }

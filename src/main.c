@@ -39,12 +39,15 @@ int	main(int argc, char **argv, char **env)
 		command = readline("minishell> ");
 		if (is_empty(command))
 			continue ;
-		printf("%s\n", command); // to delete
-		// create history
+		else
+		{
+			add_history(command);
+		}
 		// parsing
 		// execution
+		printf("%s\n", command); // to delete
 	}
 	// rl_clear_history();
-	// free
+	free(command);
 	return (0);
 }

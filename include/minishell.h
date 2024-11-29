@@ -14,5 +14,8 @@
 // }				t_data;
 
 int	ft_strlen(char *str);
+void	*ft_memset(void *s, int c, size_t n);
+void initialize_signals(void);
+void handle_sigint(int sig);
 
 #endif

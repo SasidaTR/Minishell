@@ -26,6 +26,7 @@ void	initialize(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	(void)env;
+	initialize_signals();
 }
 
 int	main(int argc, char **argv, char **env)
@@ -38,6 +39,11 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		command = readline("minishell> ");
+		if(!command) //pour gérer le ctrl+D sinon segfault
+		{
+			printf("exit\n");
+			break;
+		}
 		if (is_empty(command))
 			continue ;
 		else
@@ -48,7 +54,7 @@ int	main(int argc, char **argv, char **env)
 		// execution
 		printf("%s\n", command); // to delete
 	}
-	// rl_clear_history();
+	//rl_clear_history();
 	free(command);
 	return (0);
 }

@@ -1,4 +1,3 @@
-
 #include "../include/minishell.h"
 
 bool	is_space(char c)
@@ -51,7 +50,7 @@ int	main(int argc, char **argv, char **env)
 			add_history(command);
 		}
 		// parsing
-		// execution
+        exec_command(command);
 		printf("%s\n", command); // to delete
 	}
 	//rl_clear_history();

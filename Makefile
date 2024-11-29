@@ -1,7 +1,7 @@
 NAME = minishell
 CC = cc
 CFLAGS = -Wall -Werror -Wextra
-SRC = $(wildcard src/*.c src/libft/*.c src/handle/*.c)
+SRC = $(wildcard src/*.c src/libft/*.c src/handle/*.c src/exec/*.c)
 OBJ_DIR = obj
 OBJ = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC))
 

@@ -1,23 +1,18 @@
 NAME = minishell
 CC = cc
 CFLAGS = -Wall -Werror -Wextra
-SRC = $(wildcard src/*.c) $(wildcard handle/*.c)
+SRC = $(wildcard src/*.c src/libft/*.c src/handle/*.c)
 OBJ_DIR = obj
 OBJ = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC))
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -lreadline
+	$(CC) $(CFLAGS) $(OBJ) -o $@ -lreadline
 
-$(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJ_DIR)/src/%.o: src/%.c | $(OBJ_DIR)/src
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR) $(OBJ_DIR)/src
 
 clean:
 	rm -rf $(OBJ_DIR)

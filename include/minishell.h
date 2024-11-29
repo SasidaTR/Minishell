@@ -3,15 +3,16 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <stdbool.h>
+# include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <signal.h>
 
 // typedef struct s_data
 // {
 
 // }				t_data;
 
-
+int	ft_strlen(char *str);
 
 #endif

@@ -52,6 +52,7 @@ int	main(int argc, char **argv, char **env)
 		// parsing
         exec_command(command);
 		printf("%s\n", command); // to delete
+		free(command);
 	}
 	//rl_clear_history();
 	free(command);

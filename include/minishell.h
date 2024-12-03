@@ -23,6 +23,8 @@ void handle_sigint(int sig);
 void exec_command(char **args, char **env);
 char	**ft_split(char *str, char c);
 void	free_array(char **array);
+int ft_echo(void);
+int	ft_strncmp(const char *s1, const char *s2, size_t n);
 
 
 #endif

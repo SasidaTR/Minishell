@@ -73,8 +73,8 @@ int	main(int argc, char **argv, char **env)
 			continue;
 		}
 		// parsing
-		for (int i = 0; args[i]; i++)
-    		printf("args[%d]: %s\n", i, args[i]);
+		// for (int i = 0; args[i]; i++)
+    	// 	printf("args[%d]: %s\n", i, args[i]);
 
         exec_command(args, env); //à modifier quand on aura récupéré notre propre env
 		// printf("%s\n", command); // to delete

@@ -20,7 +20,9 @@ int	ft_strlen(char *str);
 void	*ft_memset(void *s, int c, size_t n);
 void initialize_signals(void);
 void handle_sigint(int sig);
-void exec_command(char *command);
+void exec_command(char **args, char **env);
+char	**ft_split(char *str, char c);
+void	free_array(char **array);
 
 
 #endif

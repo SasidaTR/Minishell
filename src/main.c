@@ -1,3 +1,4 @@
+
 #include "../include/minishell.h"
 
 bool	is_space(char c)
@@ -27,11 +28,25 @@ void	initialize(int argc, char **argv, char **env)
 	(void)env;
 	initialize_signals();
 }
+// void print_args(char **args)
+// {
+//     if (!args)
+//     {
+//         printf("args is NULL\n");
+//         return;
+//     }
+//     for (int i = 0; args[i]; i++)
+// 	{
+//         printf("args[%d]: '%s'\n", i, args[i]);
+//     	printf("args[%d]: NULL\n", i);
+// 	}
+// }
 
 int	main(int argc, char **argv, char **env)
 {
 	// t_data data;
 	char	*command;
+	char	**args;
 
 	initialize(argc, argv, env);
 	// make env
@@ -44,17 +59,28 @@ int	main(int argc, char **argv, char **env)
 			break;
 		}
 		if (is_empty(command))
-			continue ;
-		else
 		{
-			add_history(command);
+			free(command);
+			continue ;
+		}
+		add_history(command);
+		args = ft_split(command, ' ');
+		//print_args(args); // Inspecte le contenu de args
+		free(command);
+		if(!args || !args[0])
+		{
+			free_array(args);
+			continue;
 		}
 		// parsing
-        exec_command(command);
-		printf("%s\n", command); // to delete
-		free(command);
+		for (int i = 0; args[i]; i++)
+    		printf("args[%d]: %s\n", i, args[i]);
+
+        exec_command(args, env); //à modifier quand on aura récupéré notre propre env
+		// printf("%s\n", command); // to delete
+		free_array(args);
 	}
 	//rl_clear_history();
-	free(command);
+	// free(command);
 	return (0);
 }

@@ -1,5 +1,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
+#define _XOPEN_SOURCE 700 //pour supp l'erreur dans handle.c
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -10,6 +11,7 @@
 #include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+
 
 // typedef struct s_data
 // {

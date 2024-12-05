@@ -6,13 +6,13 @@
 /*   By: earnera <earnera@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 13:07:17 by earnera           #+#    #+#             */
-/*   Updated: 2024/12/03 15:09:35 by earnera          ###   ########.fr       */
+/*   Updated: 2024/12/05 10:10:06 by earnera          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int ft_echo(void)
+int ft_echo(char *str)
 {
     return(0);
 }

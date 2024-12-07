@@ -6,14 +6,34 @@
 /*   By: earnera <earnera@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 13:07:17 by earnera           #+#    #+#             */
-/*   Updated: 2024/12/05 10:37:42 by earnera          ###   ########.fr       */
+/*   Updated: 2024/12/07 17:22:19 by earnera          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int ft_echo(void)
+
+/*pas finie, il reste à gérer les \n et les quotes (faudrait un parsing fonctionnel pr ça certainement)*/
+int ft_echo(char **args)
 {
+    int i;
+    int newline = 1;
+
+    i = 1;
+    if(args[i] && strncmp(args[i], "-n", 2) == 0)
+    {
+        newline = 0;
+        i++;
+    }
+    while(args[i])
+    {
+        printf("%s", args[i]);
+        if(args[i + 1] != NULL)
+            printf(" ");
+        i++;
+    }
+    if(newline)
+        printf("\n");
     return(0);
 }
 

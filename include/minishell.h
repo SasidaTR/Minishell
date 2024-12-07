@@ -25,7 +25,13 @@ void handle_sigint(int sig);
 void exec_command(char **args, char **env);
 char	**ft_split(char *str, char c);
 void	free_array(char **array);
-int ft_echo(void);
+int ft_echo(char **args);
+int ft_cd(void);
+int ft_pwd(void);
+int ft_export(void);
+int ft_unset(void);
+int ft_env(void);
+int ft_exit(void);
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
 
 

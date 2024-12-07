@@ -1,22 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: earnera <earnera@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/07 17:11:11 by earnera           #+#    #+#             */
+/*   Updated: 2024/12/07 17:18:55 by earnera          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 #include "../../include/minishell.h"
 
 int is_builtin(char **args)
 {
     if(ft_strncmp(args[0], "echo", ft_strlen(args[0])) == 0)
-        return(ft_echo());
+        return(ft_echo(args), 1);
     else if(ft_strncmp(args[0], "cd", ft_strlen(args[0])) == 0)
-        return(ft_cd());
+        return(ft_cd(), 1);
     else if(ft_strncmp(args[0], "pwd", ft_strlen(args[0])) == 0)
-        return(ft_pwd());
+        return(ft_pwd(), 1);
     else if(ft_strncmp(args[0], "export", ft_strlen(args[0])) == 0)
-        return(ft_export());
+        return(ft_export(), 1);
     else if(ft_strncmp(args[0], "unset", ft_strlen(args[0])) == 0)
-        return(ft_unset());
+        return(ft_unset(), 1);
     else if(ft_strncmp(args[0], "env", ft_strlen(args[0])) == 0)
-        return(ft_env());
+        return(ft_env(), 1);
     else if(ft_strncmp(args[0], "exit", ft_strlen(args[0])) == 0)
-        return(ft_exit());
+        return(ft_exit(), 1);
     return(0);
 
 }
@@ -26,7 +38,7 @@ void exec_command(char **args, char **env)
     pid_t pid;
     int status;
 
-    if(is_builtin(args[0]))
+    if(is_builtin(args))
         return;
     else
     {

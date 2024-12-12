@@ -20,7 +20,7 @@ int ft_echo(char **args)
     int newline = 1;
 
     i = 1;
-    if(args[i] && strncmp(args[i], "-n", 2) == 0)
+    if(args[i] && ft_strncmp(args[i], "-n", 2) == 0)
     {
         newline = 0;
         i++;

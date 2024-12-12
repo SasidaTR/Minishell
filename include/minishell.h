@@ -32,5 +32,8 @@ int		ft_env(void);
 int		ft_exit(void);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 void	exec_command(char **args, char **env);
+char	*quotes(char *command);
+char	**pipes(char *command);
+void	exec_pipe(char **args, char **env, int is_first, int is_last);
 
 #endif

@@ -45,16 +45,15 @@ void	initialize(int argc, char **argv, char **env)
 
 int	main(int argc, char **argv, char **env)
 {
-	// t_data data;
 	char	*command;
 	char	**args;
+	char	*parsed_arg;
 
 	initialize(argc, argv, env);
-	// make env
 	while (1)
 	{
 		command = readline("minishell> ");
-		if(!command) //pour gérer le ctrl+D sinon segfault
+		if (!command)
 		{
 			printf("exit\n");
 			break;
@@ -62,26 +61,33 @@ int	main(int argc, char **argv, char **env)
 		if (is_empty(command))
 		{
 			free(command);
-			continue ;
+			continue;
 		}
 		add_history(command);
 		args = ft_split(command, ' ');
-		//print_args(args); // Inspecte le contenu de args
 		free(command);
-		if(!args || !args[0])
+		if (!args || !args[0])
 		{
 			free_array(args);
 			continue;
 		}
-		// parsing
-		// for (int i = 0; args[i]; i++)
-    	// 	printf("args[%d]: %s\n", i, args[i]);
-
-        exec_command(args, env); //à modifier quand on aura récupéré notre propre env
-		// printf("%s\n", command); // to delete
+		for (int i = 0; args[i]; i++)
+		{
+			parsed_arg = quotes(args[i]);
+			if (!parsed_arg)
+			{
+				printf("Error: Unclosed quotes\n");
+				free_array(args);
+				args = NULL;
+				break;
+			}
+			free(args[i]);
+			args[i] = parsed_arg;
+		}
+		if (!args)
+			continue;
+		exec_command(args, env);
 		free_array(args);
 	}
-	//rl_clear_history();
-	// free(command);
 	return (0);
 }

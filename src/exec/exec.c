@@ -6,7 +6,7 @@
 /*   By: earnera <earnera@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 17:11:11 by earnera           #+#    #+#             */
-/*   Updated: 2024/12/07 17:18:55 by earnera          ###   ########.fr       */
+/*   Updated: 2024/12/12 14:27:41 by earnera          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void exec_command(char **args, char **env)
     pid_t pid;
     int status;
 
-    if(is_builtin(args))
+    if(is_builtin(&args[0]))
         return;
     else
     {

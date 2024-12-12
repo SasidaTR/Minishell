@@ -22,7 +22,6 @@ int	ft_strlen(char *str);
 void	*ft_memset(void *s, int c, size_t n);
 void initialize_signals(void);
 void handle_sigint(int sig);
-void exec_command(char **args, char **env);
 char	**ft_split(char *str, char c);
 void	free_array(char **array);
 int ft_echo(char **args);
@@ -33,6 +32,8 @@ int ft_unset(void);
 int ft_env(void);
 int ft_exit(void);
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
+void exec_command(char **args, char **env);
+
 
 
 #endif

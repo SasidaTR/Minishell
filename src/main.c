@@ -28,6 +28,7 @@ void	initialize(int argc, char **argv, char **env)
 	(void)env;
 	initialize_signals();
 }
+
 // void print_args(char **args)
 // {
 //     if (!args)

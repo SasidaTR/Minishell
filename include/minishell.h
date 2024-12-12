@@ -19,11 +19,11 @@
 
 int		ft_strlen(char *str);
 void	*ft_memset(void *s, int c, size_t n);
-void 	initialize_signals(void);
-void 	handle_sigint(int sig);
+void	initialize_signals(void);
+void	handle_sigint(int sig);
 char	**ft_split(char *str, char c);
 void	free_array(char **array);
-int 	ft_echo(char **args);
+int		ft_echo(char **args);
 int		ft_cd(void);
 int		ft_pwd(void);
 int		ft_export(void);

@@ -61,6 +61,48 @@ void exec_command(char **args, char **env)
 	}
 }
 
+void	exec_pipe(char **args, char **env, int is_first, int is_last)
+{
+	int		pipe_fd[2];
+	pid_t	pid;
+
+	if (!is_last && pipe(pipe_fd) == -1)
+	{
+		perror("pipe");
+		exit(EXIT_FAILURE);
+	}
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0) // Processus enfant
+	{
+		if (!is_first)
+			dup2(pipe_fd[0], STDIN_FILENO);
+		if (!is_last)
+			dup2(pipe_fd[1], STDOUT_FILENO);
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+		if (execve(args[0], args, env) == -1)
+		{
+			perror("execve");
+			exit(EXIT_FAILURE);
+		}
+	}
+	else // Processus parent
+	{
+		waitpid(pid, NULL, 0);
+		if (!is_last)
+		{
+			close(pipe_fd[1]);
+			dup2(pipe_fd[0], STDIN_FILENO);
+			close(pipe_fd[0]);
+		}
+	}
+}
+
 // void exec_command(char *command)
 // {
 // 	pid_t pid;

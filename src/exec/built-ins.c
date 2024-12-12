@@ -12,8 +12,7 @@
 
 #include "../../include/minishell.h"
 
-
-/*pas finie, il reste à gérer les \n et les quotes (faudrait un parsing fonctionnel pr ça certainement)*/
+// pas finie, il reste à gérer les \n et les quotes (faudrait un parsing fonctionnel pr ça certainement)
 int ft_echo(char **args)
 {
     int i;
@@ -39,7 +38,6 @@ int ft_echo(char **args)
 
 int ft_cd(void)
 {
-    
     return(0);
 }
 

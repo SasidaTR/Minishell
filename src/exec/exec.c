@@ -43,7 +43,7 @@ void exec_command(char **args, char **env)
     else
     {
         pid = fork();
-        if(pid == 0) //si c'est le fils
+        if(pid == 0) // si c'est le fils
         {
             if(execve(args[0], args, env) == -1)
             {
@@ -53,7 +53,7 @@ void exec_command(char **args, char **env)
         }
         else if(pid > 0)
         {
-            waitpid(pid, &status, 0); //si pid!=0 alors c'est le père donc il attend le fils
+            waitpid(pid, &status, 0); // si pid!=0 alors c'est le père donc il attend le fils
         }
         else
         {

@@ -1,4 +1,3 @@
-
 #include "../include/minishell.h"
 
 bool	is_space(char c)
@@ -28,20 +27,6 @@ void	initialize(int argc, char **argv, char **env)
 	(void)env;
 	initialize_signals();
 }
-
-// void print_args(char **args)
-// {
-//     if (!args)
-//     {
-//         printf("args is NULL\n");
-//         return;
-//     }
-//     for (int i = 0; args[i]; i++)
-// 	{
-//         printf("args[%d]: '%s'\n", i, args[i]);
-//     	printf("args[%d]: NULL\n", i);
-// 	}
-// }
 
 int	main(int argc, char **argv, char **env)
 {
@@ -86,7 +71,10 @@ int	main(int argc, char **argv, char **env)
 		}
 		if (!args)
 			continue;
-		exec_command(args, env);
+		if (ft_strchr(command, '|'))
+			exec_pipes(command, env);
+		else
+			exec_command(args, env);
 		free_array(args);
 	}
 	return (0);

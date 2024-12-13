@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: earnera <earnera@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/07 17:11:11 by earnera           #+#    #+#             */
-/*   Updated: 2024/12/12 14:27:41 by earnera          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../include/minishell.h"
 
 int is_builtin(char **args)
@@ -32,7 +20,7 @@ int is_builtin(char **args)
 
 }
 
-void exec_command(char **args, char **env)
+void	exec_command(char **args, char **env)
 {
 	pid_t pid;
 	int status;
@@ -52,7 +40,7 @@ void exec_command(char **args, char **env)
 		}
 		else if(pid > 0)
 		{
-			waitpid(pid, &status, 0); // si pid!=0 alors c'est le père donc il attend le fils
+			waitpid(pid, &status, 0); // si pid != 0 alors c'est le père donc il attend le fils
 		}
 		else
 		{
@@ -61,71 +49,54 @@ void exec_command(char **args, char **env)
 	}
 }
 
-void	exec_pipe(char **args, char **env, int is_first, int is_last)
+void	exec_pipes(char *command, char **env)
 {
+	char	**commands = pipes(command);
 	int		pipe_fd[2];
+	int		prev_fd = -1;
 	pid_t	pid;
+	int		i = 0;
 
-	if (!is_last && pipe(pipe_fd) == -1)
+	while (commands && commands[i])
 	{
-		perror("pipe");
-		exit(EXIT_FAILURE);
-	}
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	if (pid == 0) // Processus enfant
-	{
-		if (!is_first)
-			dup2(pipe_fd[0], STDIN_FILENO);
-		if (!is_last)
-			dup2(pipe_fd[1], STDOUT_FILENO);
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-		if (execve(args[0], args, env) == -1)
+		if (commands[i + 1] && pipe(pipe_fd) == -1)
 		{
-			perror("execve");
+			perror("pipe");
 			exit(EXIT_FAILURE);
 		}
-	}
-	else // Processus parent
-	{
-		waitpid(pid, NULL, 0);
-		if (!is_last)
+		pid = fork();
+		if (pid == -1)
 		{
-			close(pipe_fd[1]);
-			dup2(pipe_fd[0], STDIN_FILENO);
-			close(pipe_fd[0]);
+			perror("fork");
+			exit(EXIT_FAILURE);
 		}
+		if (pid == 0)
+		{
+			if (prev_fd != -1)
+				dup2(prev_fd, STDIN_FILENO);
+			if (commands[i + 1])
+				dup2(pipe_fd[1], STDOUT_FILENO);
+			if (commands[i + 1])
+				close(pipe_fd[0]);
+			close(pipe_fd[1]);
+			close(prev_fd);
+			char **args = ft_split(commands[i], ' ');
+			if (!args || execve(args[0], args, env) == -1)
+			{
+				perror("execve");
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			if (prev_fd != -1)
+				close(prev_fd);
+			if (commands[i + 1])
+				close(pipe_fd[1]);
+			prev_fd = commands[i + 1] ? pipe_fd[0] : -1;
+			waitpid(pid, NULL, 0);
+		}
+		i++;
 	}
+	free_array(commands);
 }
-
-// void exec_command(char *command)
-// {
-// 	pid_t pid;
-// 	int status;
-// 	char *args[2];
-
-// 	pid = fork();
-// 	if(pid == 0)
-// 	{
-// 		args[0] = command;
-// 		args[1] = NULL;
-// 		if(execve(command, args, NULL) == -1)
-// 		{
-// 			perror("execve");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 	}
-// 	else if(pid > 0)
-// 	{
-// 		waitpid(pid, &status, 0);
-// 	}
-// 	else
-// 	{
-// 		perror("fork");
-// 	}
-// }

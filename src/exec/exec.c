@@ -49,7 +49,7 @@ void	exec_command(char **args, char **env)
 	}
 }
 
-void	exec_pipes(char *command, char **env)
+void exec_pipes(char *command, char **env)
 {
 	char	**commands = pipes(command);
 	int		pipe_fd[2];
@@ -73,15 +73,18 @@ void	exec_pipes(char *command, char **env)
 		if (pid == 0)
 		{
 			if (prev_fd != -1)
+			{
 				dup2(prev_fd, STDIN_FILENO);
+				close(prev_fd);
+			}
 			if (commands[i + 1])
+			{
 				dup2(pipe_fd[1], STDOUT_FILENO);
-			if (commands[i + 1])
 				close(pipe_fd[0]);
-			close(pipe_fd[1]);
-			close(prev_fd);
+				close(pipe_fd[1]);
+			}
 			char **args = ft_split(commands[i], ' ');
-			if (!args || execve(args[0], args, env) == -1)
+			if (execve(args[0], args, env) == -1)
 			{
 				perror("execve");
 				exit(EXIT_FAILURE);
@@ -93,7 +96,7 @@ void	exec_pipes(char *command, char **env)
 				close(prev_fd);
 			if (commands[i + 1])
 				close(pipe_fd[1]);
-			prev_fd = commands[i + 1] ? pipe_fd[0] : -1;
+			prev_fd = pipe_fd[0];
 			waitpid(pid, NULL, 0);
 		}
 		i++;

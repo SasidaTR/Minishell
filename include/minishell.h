@@ -38,5 +38,7 @@ char	**ft_split(char *str, char c);
 char	*ft_strchr(const char *s, int c);
 int		ft_strlen(char *str);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+bool	is_empty(char *command);
+bool	is_space(char c);
 
 #endif

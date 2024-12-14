@@ -1,23 +1,15 @@
 #include "../include/minishell.h"
 
-bool	is_space(char c)
+void initialize_signals(void)
 {
-	if (c && (c == ' ' || c == '\n' || c == '\r' || c == '\f' || c == '\t' \
-	|| c == '\v'))
-		return (true);
-	return (false);
-}
+	struct sigaction sa;
 
-bool	is_empty(char *command)
-{
-	int	i;
-
-	i = 0;
-	while (command[i] && is_space(command[i]))
-		i++;
-	if (i == ft_strlen(command))
-		return (true);
-	return (false);
+	ft_memset(&sa, 0, sizeof(sa));
+	sa.sa_handler = handle_sigint;
+	sa.sa_flags = SA_RESTART;
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGINT, &sa, NULL);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 void	initialize(int argc, char **argv, char **env)
@@ -25,7 +17,6 @@ void	initialize(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	(void)env;
-	initialize_signals();
 }
 
 int	main(int argc, char **argv, char **env)
@@ -35,6 +26,7 @@ int	main(int argc, char **argv, char **env)
 	char	*parsed_arg;
 
 	initialize(argc, argv, env);
+	initialize_signals();
 	while (1)
 	{
 		command = readline("minishell> ");

@@ -42,7 +42,6 @@ int	main(int argc, char **argv, char **env)
 		}
 		add_history(command);
 		args = ft_split(command, ' ');
-		free(command);
 		if (!args || !args[0])
 		{
 			free_array(args);
@@ -67,6 +66,7 @@ int	main(int argc, char **argv, char **env)
 			exec_pipes(command, env);
 		else
 			exec_command(args, env);
+		free(command);
 		free_array(args);
 	}
 	return (0);

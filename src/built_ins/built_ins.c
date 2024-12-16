@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   built-ins.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: earnera <earnera@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/03 13:07:17 by earnera           #+#    #+#             */
-/*   Updated: 2024/12/07 17:33:45 by earnera          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../include/minishell.h"
 
 // pas finie, il reste à gérer les \n et les quotes (faudrait un parsing fonctionnel pr ça certainement)

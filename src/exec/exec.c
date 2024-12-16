@@ -25,8 +25,8 @@ void	exec_command(char **args, char **env)
 	pid_t pid;
 	int status;
 
-	if(is_builtin(&args[0]))
-		return;
+	if (is_builtin(&args[0]))
+		return ;
 	else
 	{
 		pid = fork();
@@ -39,13 +39,9 @@ void	exec_command(char **args, char **env)
 			}
 		}
 		else if(pid > 0)
-		{
 			waitpid(pid, &status, 0); // si pid != 0 alors c'est le père donc il attend le fils
-		}
 		else
-		{
 			perror("fork");
-		}
 	}
 }
 

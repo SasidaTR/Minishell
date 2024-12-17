@@ -1,21 +1,21 @@
 #include "../../include/minishell.h"
 
 // pas finie, il reste à gérer les \n et les quotes (faudrait un parsing fonctionnel pr ça certainement)
-int ft_echo(char **args)
+int ft_echo(char **splited_command)
 {
 	int i;
 	int newline = 1;
 
 	i = 1;
-	if(args[i] && ft_strncmp(args[i], "-n", 2) == 0)
+	if(splited_command[i] && ft_strncmp(splited_command[i], "-n", 2) == 0)
 	{
 		newline = 0;
 		i++;
 	}
-	while(args[i])
+	while(splited_command[i])
 	{
-		printf("%s", args[i]);
-		if(args[i + 1] != NULL)
+		printf("%s", splited_command[i]);
+		if(splited_command[i + 1] != NULL)
 			printf(" ");
 		i++;
 	}

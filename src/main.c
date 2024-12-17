@@ -12,18 +12,19 @@ void initialize_signals(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	initialize(int argc, char **argv, char **env)
+void initialize(int argc, char **argv, char **env)
 {
 	(void)argc;
 	(void)argv;
 	(void)env;
 }
 
-int	main(int argc, char **argv, char **env)
+int main(int argc, char **argv, char **env)
 {
-	char	*command;
-	char	**args;
-	char	*parsed_arg;
+	char    *command;
+	char    **pipe_commands;
+	char    **splited_command;
+	char    *parsed_arg;
 
 	initialize(argc, argv, env);
 	initialize_signals();
@@ -41,33 +42,41 @@ int	main(int argc, char **argv, char **env)
 			continue;
 		}
 		add_history(command);
-		args = ft_split(command, ' ');
-		if (!args || !args[0])
+		pipe_commands = ft_split(command, '|');
+		if (!pipe_commands || !pipe_commands[0])
 		{
-			free_array(args);
+			free(command);
+			free_array(pipe_commands);
 			continue;
 		}
-		for (int i = 0; args[i]; i++)
+		for (int i = 0; pipe_commands[i]; i++)
 		{
-			parsed_arg = quotes(args[i]);
-			if (!parsed_arg)
+			splited_command = ft_split(pipe_commands[i], ' ');
+			if (!splited_command || !splited_command[0])
 			{
-				printf("Error: Unclosed quotes\n");
-				free_array(args);
-				args = NULL;
-				break;
+				free_array(splited_command);
+				continue;
 			}
-			free(args[i]);
-			args[i] = parsed_arg;
+			for (int j = 0; splited_command[j]; j++)
+			{
+				parsed_arg = quotes(splited_command[j]);
+				if (!parsed_arg)
+				{
+					printf("Error: Unclosed quotes\n");
+					free_array(splited_command);
+					splited_command = NULL;
+					break;
+				}
+				free(splited_command[j]);
+				splited_command[j] = parsed_arg;
+			}
+			if (!splited_command)
+				continue;
+			execute_command(splited_command, env);
+			free_array(splited_command);
 		}
-		if (!args)
-			continue;
-		if (ft_strchr(command, '|'))
-			exec_pipes(command, env);
-		else
-			exec_command(args, env);
 		free(command);
-		free_array(args);
+		free_array(pipe_commands);
 	}
 	return (0);
 }

@@ -26,10 +26,8 @@ int		ft_export(void);
 int 	ft_unset(void);
 int		ft_env(void);
 int		ft_exit(void);
-void	exec_command(char **args, char **env);
+void	execute_command(char **args, char **env);
 char	*quotes(char *command);
-char	**pipes(char *command);
-void	exec_pipes(char *command, char **env);
 
 // Libft
 void	free_array(char **array);

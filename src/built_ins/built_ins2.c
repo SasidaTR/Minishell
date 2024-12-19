@@ -2,10 +2,10 @@
 
 int ft_env(void)
 {
-	return(0);
+	return (0);
 }
 
 int ft_exit(void)
 {
-	return(0);
+	return (0);
 }

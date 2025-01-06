@@ -29,19 +29,15 @@ int	main(int argc, char **argv, char **env)
 	{
 		command = readline("minishell> ");
 		if (!command)
-		{
-			perror("readline");
-			printf("exit\n");
-			break;
-		}
+			free_all(command, 1);
 		if (is_empty(command))
 		{
-			free(command);
+			free_all(command, 0);
 			continue;
 		}
 		add_history(command);
 		parsing(command, env);
-		free(command);
+		free_all(command, 0);
 	}
 	return (0);
 }

@@ -44,4 +44,7 @@ void	parsing(char *command, char **env);
 char	*quotes(char *command);
 char	**advanced_split(char *command, char sep);
 
+// utils
+void	free_all(char *command, int exit_program);
+
 #endif

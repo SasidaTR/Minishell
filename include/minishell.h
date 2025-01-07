@@ -12,6 +12,14 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+
+
+typedef struct s_data
+{
+    char **env;
+}               t_data;
+
+
 // built_ins
 int		ft_echo(char **args);
 int		ft_cd(void);

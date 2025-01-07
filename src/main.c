@@ -1,5 +1,31 @@
 #include "../include/minishell.h"
 
+int get_env(t_data *data, char **env)
+{
+	int i;
+	char **temp_path;
+
+	i = 0;
+	if(env == NULL)
+		return(0);
+	while(env[i])
+	{
+		if(ft_strncmp(env[i], "PATH=", 5) == 0)
+		{
+			temp_path = ft_split(env[i], '=');
+			if(temp_path && temp_path[1])
+			{
+				data->env = ft_split(temp_path[1], ':');
+				free_array(temp_path);
+				return(1);
+			}
+			free_array(temp_path);
+		}
+		i++;
+	}
+	return(0);
+}
+
 void	initialize_signals(void)
 {
 	struct sigaction sa;
@@ -12,32 +38,41 @@ void	initialize_signals(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	initialize(int argc, char **argv, char **env)
+void	initialize(t_data *data, int argc, char **argv, char **env)
 {
 	(void)argc;
 	(void)argv;
 	(void)env;
+	data->env = NULL;
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	char	*command;
+	t_data data;
 
-	initialize(argc, argv, env);
+	initialize(&data, argc, argv, env);
+	if(!get_env(&data, env))
+		return(0); //libérer quand on aura des fonctions de free
 	initialize_signals();
 	while (1)
 	{
 		command = readline("minishell> ");
 		if (!command)
-			free_all(command, 1);
+		{
+			perror("readline");
+			printf("exit\n");
+			break;
+		}
 		if (is_empty(command))
 		{
-			free_all(command, 0);
+			free(command);
 			continue;
 		}
 		add_history(command);
 		parsing(command, env);
-		free_all(command, 0);
+		free(command);
 	}
+	free_array(data.env);
 	return (0);
 }

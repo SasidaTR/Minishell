@@ -12,7 +12,7 @@ int get_env(t_data *data, char **env)
 	if(!(data->env = (char**)malloc(sizeof(char *) * (i + 1))))
 		return(0);
 	i = 0;
-	while(env[i - 1] != NULL)
+	while(env[i])
 	{
 		data->env[i] = ft_strdup(env[i]);
 		i++;
@@ -40,6 +40,15 @@ void	initialize(t_data *data, int argc, char **argv, char **env)
 	(void)env;
 	data->env = NULL;
 }
+// void print_env(t_data *data)
+// {
+// 	int i = 0;
+// 	while(data->env[i])
+// 	{
+// 		printf("env = %s\n", data->env[i]);
+// 		i++;
+// 	}
+// }
 
 int	main(int argc, char **argv, char **env)
 {
@@ -49,6 +58,7 @@ int	main(int argc, char **argv, char **env)
 	initialize(&data, argc, argv, env);
 	if (!get_env(&data, env))
 		return (0); // libérer quand on aura des fonctions de free
+	// print_env(&data);
 	initialize_signals();
 	while (1)
 	{

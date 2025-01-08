@@ -1,24 +1,24 @@
 #include "../include/minishell.h"
 
-int get_env(t_data *data, char **env)
+int	get_env(t_data *data, char **env)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
-	if(env == NULL)
-		return(0);
-	while(env[i])
+	if (env == NULL)
+		return (0);
+	while (env[i])
 		i++;
-	if(!(data->env = (char**)malloc(sizeof(char *) * (i + 1))))
-		return(0);
+	if (!(data->env = (char**)malloc(sizeof(char *) * (i + 1))))
+		return (0);
 	i = 0;
-	while(env[i])
+	while (env[i])
 	{
 		data->env[i] = ft_strdup(env[i]);
 		i++;
 	}
 	data->env[i] = 0;
-	return(1);
+	return (1);
 }
 
 void	initialize_signals(void)

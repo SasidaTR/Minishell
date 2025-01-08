@@ -12,13 +12,10 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-
-
 typedef struct s_data
 {
     char **env;
 }               t_data;
-
 
 // built_ins
 int		ft_echo(char **args);
@@ -36,7 +33,6 @@ void	handle_sigint(int sig);
 void	execute_command(char **args, char **env);
 
 // libft
-void	free_array(char **array);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 void	*ft_memset(void *s, int c, size_t n);
 char	**ft_split(char *str, char c);
@@ -48,11 +44,12 @@ bool	is_empty(char *command);
 bool	is_space(char c);
 
 // parsing
-void	parsing(char *command, char **env);
+bool	parsing(char *command, char **env);
 char	*quotes(char *command);
 char	**advanced_split(char *command, char sep);
 
 // utils
+void	free_array(char **array);
 void	free_all(char *command, int exit_program);
 
 #endif

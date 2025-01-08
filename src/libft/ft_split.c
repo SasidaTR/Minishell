@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-void free_split(char **str)
+void	free_split(char **str)
 {
 	int	i;
 
@@ -24,6 +24,7 @@ void free_split(char **str)
 	}
 	free(str);
 }
+
 static int	count_characters(char *s, char c)
 {
 	int	i;
@@ -35,7 +36,8 @@ static int	count_characters(char *s, char c)
 	}
 	return (i);
 }
-int count_words(char *str, char c)
+
+int	count_words(char *str, char c)
 {
 	int	i;
 	int	count;
@@ -49,44 +51,49 @@ int count_words(char *str, char c)
 		if (str[i] && str[i] != c)
 		{
 			count++;
-			while(str[i] && str[i] != c)
+			while (str[i] && str[i] != c)
 				i++;
 		}
 	}
 	return (count);
 }
-char *get_word(char *s, char c)
-{	
-	int i;
-	char *dest;
-	int nb_characteres;
+
+char	*get_word(char *s, char c)
+{
+	int		i;
+	char	*dest;
+	int		nb_characters;
 
 	i = 0;
-	nb_characteres = count_characters(s,c);
-	dest = malloc(sizeof(char) * (nb_characteres + 1));
-	while(s[i] && s[i] != c)
+	nb_characters = count_characters(s, c);
+	dest = malloc(sizeof(char) * (nb_characters + 1));
+	if (!dest)
+		return (NULL);
+	while (s[i] && s[i] != c)
 	{
-		dest [i] = s[i];
+		dest[i] = s[i];
 		i++;
 	}
 	dest[i] = '\0';
 	return (dest);
 }
+
 char	**ft_split(char *str, char c)
 {
-	char **tab;
-	int nb_words;
-	int	i;
-	int	j;
+	char	**tab;
+	int		nb_words;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
-	nb_words = count_words(str,c);
+	nb_words = count_words(str, c);
 	tab = malloc(sizeof(char *) * (nb_words + 1));
 	if (!tab)
 		return (NULL);
 	while (i < nb_words)
-	{	while (str[j] == c)
+	{
+		while (str[j] == c)
 			j++;
 		tab[i] = get_word(&str[j], c);
 		if (!tab[i])

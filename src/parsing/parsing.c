@@ -1,42 +1,11 @@
 #include "../../include/minishell.h"
 
-static char	*remove_quotes(char *str)
-{
-	char	*result;
-	int		i;
-	int		j;
-	bool	single_quote = false;
-	bool	double_quote = false;
-
-	if (!str)
-		return (NULL);
-	result = malloc(ft_strlen(str) + 1);
-	if (!result)
-		return (NULL);
-	for (i = 0, j = 0; str[i]; i++)
-	{
-		if (str[i] == '\'' && !double_quote)
-			single_quote = !single_quote;
-		else if (str[i] == '"' && !single_quote)
-			double_quote = !double_quote;
-		else
-			result[j++] = str[i];
-	}
-	result[j] = '\0';
-	return (single_quote || double_quote) ? (free(result), NULL) : result;
-}
-
-static char	**split_pipes(char *command)
-{
-	return (advanced_split(command, '|'));
-}
-
 bool	parsing(char *command, char **env)
 {
 	char	**pipe_commands;
 	char	*parsed_command;
 
-	pipe_commands = split_pipes(command);
+	pipe_commands = advanced_split(command, '|');
 	if (!pipe_commands || !pipe_commands[0])
 	{
 		free_array(pipe_commands);

@@ -3,9 +3,10 @@
 int	ft_echo(char **split_command)
 {
 	int	i;
-	int	newline = 1;
+	int	newline;
 
 	i = 1;
+	newline = 1;
 	if (split_command[i] && ft_strncmp(split_command[i], "-n", 2) == 0)
 	{
 		newline = 0;

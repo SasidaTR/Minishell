@@ -1,6 +1,6 @@
 #include "../../include/minishell.h"
 
-int is_builtin(char **splited_command)
+int	is_builtin(char **splited_command)
 {
 	if (ft_strncmp(splited_command[0], "echo", ft_strlen(splited_command[0])) == 0)
 		return (ft_echo(splited_command), 1);
@@ -21,26 +21,25 @@ int is_builtin(char **splited_command)
 
 void	execute_command(char **splited_command, char **env)
 {
-	pid_t pid;
-	int status;
+	pid_t	pid;
+	int		status;
 
 	if (is_builtin(&splited_command[0]))
 		return ;
 	else
 	{
 		pid = fork();
-		if(pid == 0)
+		if (pid == 0)
 		{
-			if(execve(splited_command[0], splited_command, env) == -1)
+			if (execve(splited_command[0], splited_command, env) == -1)
 			{
 				perror("execve");
 				exit(EXIT_FAILURE);
 			}
 		}
-		else if(pid > 0)
+		else if (pid > 0)
 			waitpid(pid, &status, 0);
 		else
 			perror("fork");
 	}
 }
-

@@ -33,11 +33,10 @@ void	initialize_signals(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	initialize(t_data *data, int argc, char **argv, char **env)
+void	initialize(int argc, char **argv, t_data *data)
 {
 	(void)argc;
 	(void)argv;
-	(void)env;
 	data->env = NULL;
 }
 // void print_env(t_data *data)
@@ -52,10 +51,10 @@ void	initialize(t_data *data, int argc, char **argv, char **env)
 
 int	main(int argc, char **argv, char **env)
 {
-	char	*command;
 	t_data	data;
+	char	*command;
 
-	initialize(&data, argc, argv, env);
+	initialize(argc, argv, &data);
 	if (!get_env(&data, env))
 		return (0); // libérer quand on aura des fonctions de free
 	// print_env(&data);
@@ -66,7 +65,10 @@ int	main(int argc, char **argv, char **env)
 		if (!command)
 			free_all(command, 1);
 		if (is_empty(command))
+		{
+			free(command);
 			continue ;
+		}
 		add_history(command);
 		if (!parsing(command, env))
 			continue ;

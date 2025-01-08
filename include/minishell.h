@@ -14,15 +14,15 @@
 
 typedef struct s_data
 {
-    char **env;
-}               t_data;
+	char	**env;
+}			t_data;
 
 // built_ins
 int		ft_echo(char **args);
 int		ft_cd(void);
 int		ft_pwd(void);
 int		ft_export(void);
-int 	ft_unset(void);
+int		ft_unset(void);
 int		ft_env(void);
 int		ft_exit(void);
 

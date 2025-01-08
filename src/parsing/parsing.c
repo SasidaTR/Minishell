@@ -3,8 +3,10 @@
 static char	*remove_quotes(char *str)
 {
 	char	*result;
-	int		i, j;
-	bool	single_quote = false, double_quote = false;
+	int		i;
+	int		j;
+	bool	single_quote = false;
+	bool	double_quote = false;
 
 	if (!str)
 		return (NULL);
@@ -26,7 +28,7 @@ static char	*remove_quotes(char *str)
 
 static char	**split_pipes(char *command)
 {
-	return advanced_split(command, '|');
+	return (advanced_split(command, '|'));
 }
 
 bool	parsing(char *command, char **env)

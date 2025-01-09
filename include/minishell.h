@@ -12,6 +12,13 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+typedef struct s_command
+{
+	char	**split_commands;
+	char	**split_command;
+	char	*command;
+}			t_command;
+
 typedef struct s_data
 {
 	char	**env;
@@ -30,7 +37,7 @@ int		ft_exit(void);
 void	handle_sigint(int sig);
 
 // execute
-void	execute_command(char **args, char **env, t_data *data);
+void	execute_command(char **splited_command, char **env, t_data *data);
 
 // libft
 void	*ft_memcpy(void *dest, const void *src, size_t n);
@@ -44,12 +51,12 @@ bool	is_empty(char *command);
 bool	is_space(char c);
 
 // parsing
-bool	parsing(char *command, char **env, t_data *data);
+bool	parsing(t_command *commands, char **env, t_data *data);
 char	**advanced_split(char *command, char sep);
 char	*remove_quotes(char *str);
 
 // utils
 void	free_array(char **array);
-void	free_all(char *command, int exit_program);
+void	free_all(t_command *commands, int exit_program);
 
 #endif

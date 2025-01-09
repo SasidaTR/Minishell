@@ -42,8 +42,8 @@ void	initialize(int argc, char **argv, t_data *data)
 
 int	main(int argc, char **argv, char **env)
 {
-	t_data	data;
-	char	*command;
+	t_data		data;
+	t_command	commands;
 
 	initialize(argc, argv, &data);
 	if (!get_env(&data, env))
@@ -51,20 +51,20 @@ int	main(int argc, char **argv, char **env)
 	initialize_signals();
 	while (1)
 	{
-		command = readline("Minishell> ");
-		if (!command)
-			free_all(command, 1);
-		if (is_empty(command))
+		commands.command = readline("Minishell> ");
+		if (!commands.command)
+			free_all(&commands, 1);
+		if (is_empty(commands.command))
 		{
-			free(command);
+			free(commands.command);
 			continue ;
 		}
-		add_history(command);
-		if (!parsing(command, env, &data))
+		add_history(commands.command);
+		if (!parsing(&commands, env, &data))
 			continue ;
 		// if (!execute())
-		// 	free_all(command, 1);
-		free_all(command, 0);
+		// 	free_all(commands.command, 1);
+		free_all(&commands, 0);
 	}
 	free_array(data.env);
 	return (0);

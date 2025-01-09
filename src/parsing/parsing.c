@@ -1,37 +1,40 @@
 #include "../../include/minishell.h"
 
-bool	parsing(char *command, char **env, t_data *data)
+bool	parsing(t_command *commands, char **env, t_data *data)
 {
 	char	**pipe_commands;
-	char	*parsed_command;
-	char	**split_args;
+	char	*no_quote_commands;
+	char	**final_command;
+	int		i;
 
-	pipe_commands = advanced_split(command, '|');
+	pipe_commands = advanced_split(commands->command, '|');
 	if (!pipe_commands || !pipe_commands[0])
 	{
 		free_array(pipe_commands);
 		return (false);
 	}
-	for (int i = 0; pipe_commands[i]; i++)
+	i = 0;
+	while (pipe_commands[i])
 	{
-		parsed_command = remove_quotes(pipe_commands[i]);
-		if (!parsed_command)
+		no_quote_commands = remove_quotes(pipe_commands[i]);
+		if (!no_quote_commands)
 		{
 			printf("Error: Unclosed quotes in command: %s\n", pipe_commands[i]);
 			free_array(pipe_commands);
 			return (false);
 		}
-		split_args = ft_split(parsed_command, ' ');
-		if (!split_args)
+		final_command = ft_split(no_quote_commands, ' ');
+		if (!final_command)
 		{
-			printf("Error: Failed to split command: %s\n", parsed_command);
-			free(parsed_command);
+			printf("Error: Failed to split command: %s\n", no_quote_commands);
+			free(no_quote_commands);
 			free_array(pipe_commands);
 			return (false);
 		}
-		execute_command(split_args, env, data);
-		free_array(split_args);
-		free(parsed_command);
+		execute_command(final_command, env, data);
+		free_array(final_command);
+		free(no_quote_commands);
+		i++;
 	}
 	free_array(pipe_commands);
 	return (true);

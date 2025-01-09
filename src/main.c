@@ -39,15 +39,6 @@ void	initialize(int argc, char **argv, t_data *data)
 	(void)argv;
 	data->env = NULL;
 }
-// void print_env(t_data *data)
-// {
-// 	int i = 0;
-// 	while(data->env[i])
-// 	{
-// 		printf("env = %s\n", data->env[i]);
-// 		i++;
-// 	}
-// }
 
 int	main(int argc, char **argv, char **env)
 {
@@ -57,7 +48,6 @@ int	main(int argc, char **argv, char **env)
 	initialize(argc, argv, &data);
 	if (!get_env(&data, env))
 		return (0); // libérer quand on aura des fonctions de free
-	// print_env(&data);
 	initialize_signals();
 	while (1)
 	{

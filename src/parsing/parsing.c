@@ -3,8 +3,7 @@
 bool	parsing(t_command *commands, char **env, t_data *data)
 {
 	char	**pipe_commands;
-	char	*no_quote_commands;
-	char	**final_command;
+	char	*no_quote_command;
 	int		i;
 
 	pipe_commands = advanced_split(commands->command, '|');
@@ -16,24 +15,24 @@ bool	parsing(t_command *commands, char **env, t_data *data)
 	i = 0;
 	while (pipe_commands[i])
 	{
-		no_quote_commands = remove_quotes(pipe_commands[i]);
-		if (!no_quote_commands)
+		no_quote_command = remove_quotes(pipe_commands[i]);
+		if (!no_quote_command)
 		{
 			printf("Error: Unclosed quotes in command: %s\n", pipe_commands[i]);
 			free_array(pipe_commands);
 			return (false);
 		}
-		final_command = ft_split(no_quote_commands, ' ');
-		if (!final_command)
+		commands->commands = ft_split(no_quote_command, ' ');
+		if (!commands->commands[i])
 		{
-			printf("Error: Failed to split command: %s\n", no_quote_commands);
-			free(no_quote_commands);
+			printf("Error: Failed to split command: %s\n", no_quote_command);
+			free(no_quote_command);
 			free_array(pipe_commands);
 			return (false);
 		}
-		execute_command(final_command, env, data);
-		free_array(final_command);
-		free(no_quote_commands);
+		execute_command(commands->commands, env, data);
+		free_array(commands->commands);
+		free(no_quote_command);
 		i++;
 	}
 	free_array(pipe_commands);

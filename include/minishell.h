@@ -14,8 +14,8 @@
 
 typedef struct s_command
 {
-	char	**split_commands;
-	char	**split_command;
+	int		nb;
+	char	**commands;
 	char	*command;
 }			t_command;
 

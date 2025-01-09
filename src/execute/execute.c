@@ -1,13 +1,13 @@
 #include "../../include/minishell.h"
 
-int	is_builtin(char **splited_command)
+int	is_builtin(char **splited_command, t_data *data)
 {
 	if (ft_strncmp(splited_command[0], "echo", ft_strlen(splited_command[0])) == 0)
 		return (ft_echo(splited_command), 1);
 	else if (ft_strncmp(splited_command[0], "cd", ft_strlen(splited_command[0])) == 0)
-		return (ft_cd(), 1);
+		return (ft_cd(splited_command), 1);
 	else if (ft_strncmp(splited_command[0], "pwd", ft_strlen(splited_command[0])) == 0)
-		return (ft_pwd(), 1);
+		return (ft_pwd(data), 1);
 	else if (ft_strncmp(splited_command[0], "export", ft_strlen(splited_command[0])) == 0)
 		return (ft_export(), 1);
 	else if (ft_strncmp(splited_command[0], "unset", ft_strlen(splited_command[0])) == 0)
@@ -19,12 +19,12 @@ int	is_builtin(char **splited_command)
 	return (0);
 }
 
-void	execute_command(char **splited_command, char **env)
+void	execute_command(char **splited_command, char **env, t_data *data)
 {
 	pid_t	pid;
 	int		status;
 
-	if (is_builtin(&splited_command[0]))
+	if (is_builtin(&splited_command[0], data))
 		return ;
 	else
 	{

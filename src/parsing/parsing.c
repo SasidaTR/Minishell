@@ -1,6 +1,6 @@
 #include "../../include/minishell.h"
 
-bool	parsing(char *command, char **env)
+bool	parsing(char *command, char **env, t_data *data)
 {
 	char	**pipe_commands;
 	char	*parsed_command;
@@ -29,7 +29,7 @@ bool	parsing(char *command, char **env)
 			free_array(pipe_commands);
 			return (false);
 		}
-		execute_command(split_args, env);
+		execute_command(split_args, env, data);
 		free_array(split_args);
 		free(parsed_command);
 	}

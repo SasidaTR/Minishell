@@ -60,7 +60,7 @@ int	main(int argc, char **argv, char **env)
 			continue ;
 		}
 		add_history(command);
-		if (!parsing(command, env))
+		if (!parsing(command, env, &data))
 			continue ;
 		// if (!execute())
 		// 	free_all(command, 1);

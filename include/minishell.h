@@ -18,9 +18,9 @@ typedef struct s_data
 }			t_data;
 
 // built_ins
-int		ft_echo(char **args);
-int		ft_cd(void);
-int		ft_pwd(void);
+int		ft_echo(char **split_command);
+int		ft_cd(char **split_command);
+int		ft_pwd(t_data *data);
 int		ft_export(void);
 int		ft_unset(void);
 int		ft_env(void);
@@ -30,7 +30,7 @@ int		ft_exit(void);
 void	handle_sigint(int sig);
 
 // execute
-void	execute_command(char **args, char **env);
+void	execute_command(char **args, char **env, t_data *data);
 
 // libft
 void	*ft_memcpy(void *dest, const void *src, size_t n);
@@ -44,7 +44,7 @@ bool	is_empty(char *command);
 bool	is_space(char c);
 
 // parsing
-bool	parsing(char *command, char **env);
+bool	parsing(char *command, char **env, t_data *data);
 char	**advanced_split(char *command, char sep);
 char	*remove_quotes(char *str);
 

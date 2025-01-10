@@ -13,7 +13,7 @@ int	is_builtin(char **split_command, t_data *data)
 	else if (ft_strncmp(split_command[0], "unset", ft_strlen(split_command[0])) == 0)
 		return (ft_unset(), 1);
 	else if (ft_strncmp(split_command[0], "env", ft_strlen(split_command[0])) == 0)
-		return (ft_env(), 1);
+		return (ft_env(data), 1);
 	else if (ft_strncmp(split_command[0], "exit", ft_strlen(split_command[0])) == 0)
 		return (ft_exit(), 1);
 	return (0);

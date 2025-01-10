@@ -1,8 +1,16 @@
 #include "../../include/minishell.h"
 
-int	ft_env(void)
+int	ft_env(t_data *data)
 {
-	return (0);
+	int i;
+
+	i = 0;
+	while(data->env[i])
+	{
+		printf("%s\n", data->env[i]);
+		i++;
+	}
+	return(0);
 }
 
 int	ft_exit(void)

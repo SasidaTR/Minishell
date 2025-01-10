@@ -30,7 +30,7 @@ int		ft_cd(char **split_command);
 int		ft_pwd(t_data *data);
 int		ft_export(void);
 int		ft_unset(void);
-int		ft_env(void);
+int		ft_env(t_data *data);
 int		ft_exit(void);
 
 // handle

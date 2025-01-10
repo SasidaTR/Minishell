@@ -7,6 +7,7 @@
 # include <stdbool.h>
 # include <signal.h>
 # include <unistd.h>
+# include <fcntl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <readline/readline.h>
@@ -14,8 +15,8 @@
 
 typedef struct s_command
 {
-	char	***commandss;
 	char	**commands;
+	char	**split_command;
 	char	*command;
 }			t_command;
 
@@ -44,6 +45,7 @@ void	*ft_memcpy(void *dest, const void *src, size_t n);
 void	*ft_memset(void *s, int c, size_t n);
 char	**ft_split(char *str, char c);
 char	*ft_strchr(const char *s, int c);
+int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strdup(const char *s1);
 int		ft_strlen(const char *str);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
@@ -53,6 +55,7 @@ bool	is_space(char c);
 // parsing
 bool	parsing(t_command *commands, char **env, t_data *data);
 char	**advanced_split(char *command, char sep);
+bool	handle_redirections(t_command *command);
 char	*remove_quotes(char *str);
 
 // utils

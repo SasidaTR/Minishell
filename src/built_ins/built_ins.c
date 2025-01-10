@@ -68,9 +68,11 @@ int	ft_pwd(t_data *data)
 	return(1);
 }
 
-int	ft_export(void)
+int	ft_export(char **split_command, t_data *data)
 {
-	return (0);
+	(void)split_command;
+	(void)data;
+	return(0);
 }
 
 int	ft_unset(void)

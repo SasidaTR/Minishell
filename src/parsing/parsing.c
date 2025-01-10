@@ -30,7 +30,7 @@ bool	parsing(t_command *commands, char **env, t_data *data)
 			free_array(pipe_commands);
 			return (false);
 		}
-		execute_command(commands->commands, env, data);
+		execute_command(commands, env, data);
 		free_array(commands->commands);
 		free(no_quote_command);
 		i++;

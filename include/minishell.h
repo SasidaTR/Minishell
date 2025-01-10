@@ -14,7 +14,7 @@
 
 typedef struct s_command
 {
-	int		nb;
+	char	***commandss;
 	char	**commands;
 	char	*command;
 }			t_command;
@@ -37,7 +37,7 @@ int		ft_exit(void);
 void	handle_sigint(int sig);
 
 // execute
-void	execute_command(char **splited_command, char **env, t_data *data);
+void	execute_command(t_command *commands, char **env, t_data *data);
 
 // libft
 void	*ft_memcpy(void *dest, const void *src, size_t n);

@@ -26,16 +26,16 @@ void	execute_command(t_command *commands, char **env, t_data *data)
 	int		status;
 
 	i = 0;
-	while (commands->commands[i])
+	while (commands->split_command[i])
 	{
-		if (is_builtin(&commands->commands[i], data))
+		if (is_builtin(&commands->split_command[i], data))
 			return ;
 		else
 		{
 			pid = fork();
 			if (pid == 0)
 			{
-				if (execve(commands->commands[i], commands->commands, env) == -1)
+				if (execve(commands->split_command[i], commands->split_command, env) == -1)
 				{
 					perror("execve");
 					exit(EXIT_FAILURE);

@@ -9,7 +9,7 @@ int	is_builtin(char **split_command, t_data *data)
 	else if (ft_strncmp(split_command[0], "pwd", ft_strlen(split_command[0])) == 0)
 		return (ft_pwd(data), 1);
 	else if (ft_strncmp(split_command[0], "export", ft_strlen(split_command[0])) == 0)
-		return (ft_export(), 1);
+		return (ft_export(split_command, data), 1);
 	else if (ft_strncmp(split_command[0], "unset", ft_strlen(split_command[0])) == 0)
 		return (ft_unset(), 1);
 	else if (ft_strncmp(split_command[0], "env", ft_strlen(split_command[0])) == 0)

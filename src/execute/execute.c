@@ -26,7 +26,7 @@ void	execute_command(t_command *commands, char **env, t_data *data)
 	int		status;
 
 	i = 0;
-	while (commands->split_command[i])
+	while (commands->commands[i])
 	{
 		if (is_builtin(&commands->split_command[i], data))
 			return ;

@@ -1,6 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # define _XOPEN_SOURCE 700
+# define INT_MAX 2147483647
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -61,5 +62,7 @@ char	*remove_quotes(char *str);
 // utils
 void	free_array(char **array);
 void	free_all(t_command *commands, int exit_program);
+void	sort_array(char **array, int n);
+
 
 #endif

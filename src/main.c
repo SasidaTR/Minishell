@@ -55,17 +55,14 @@ int	main(int argc, char **argv, char **env)
 		if (!commands.command)
 			free_all(&commands, 1);
 		if (is_empty(commands.command))
-		{
-			free(commands.command);
 			continue ;
-		}
 		add_history(commands.command);
 		if (!parsing(&commands, env, &data))
 			continue ;
 		// if (!execute())
 		// 	free_all(commands.command, 1);
-		free_all(&commands, 0);
 	}
+	free_all(&commands, 0);
 	free_array(data.env);
 	return (0);
 }

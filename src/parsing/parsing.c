@@ -8,7 +8,6 @@ bool	parsing(t_command *commands, char **env, t_data *data)
 	commands->commands = advanced_split(commands->command, '|');
 	if (!commands->commands || !commands->commands[0])
 	{
-		free_array(commands->commands);
 		return (false);
 	}
 	i = 0;
@@ -18,7 +17,6 @@ bool	parsing(t_command *commands, char **env, t_data *data)
 		if (!no_quote_command)
 		{
 			printf("Error: Unclosed quotes in command: %s\n", commands->commands[i]);
-			free_array(commands->commands);
 			return (false);
 		}
 		commands->split_command = ft_split(no_quote_command, ' ');
@@ -26,21 +24,16 @@ bool	parsing(t_command *commands, char **env, t_data *data)
 		{
 			printf("Error: Failed to split command: %s\n", no_quote_command);
 			free(no_quote_command);
-			free_array(commands->commands);
 			return (false);
 		}
 		if (!handle_redirections(commands))
 		{
-			free_array(commands->split_command);
 			free(no_quote_command);
-			free_array(commands->commands);
 			return (false);
 		}
 		execute_command(commands, env, data);
-		free_array(commands->split_command);
 		free(no_quote_command);
 		i++;
 	}
-	free_array(commands->commands);
 	return (true);
 }

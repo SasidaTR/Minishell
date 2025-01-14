@@ -16,8 +16,7 @@
 
 typedef struct s_command
 {
-	char	***commandss;
-	char	**commands;
+	char	**pipeline;
 	char	**split_command;
 	char	*command;
 }			t_command;
@@ -57,10 +56,13 @@ bool	is_empty(char *command);
 bool	is_space(char c);
 
 // parsing
-bool	parsing(t_command *commands, char **env, t_data *data);
-char	**advanced_split(char *command, char sep);
-bool	handle_redirections(t_command *command);
+bool	parsing(t_command *commands);
+char	**split_pipes(char *command);
+bool	validate_commands(char **pipeline);
 char	*remove_quotes(char *str);
+bool	update_quote_state(char c, bool *in_single_quote, bool *in_double_quote);
+void	split_command(char **result, char *command, char sep);
+int		count_segments(char *command, char sep);
 
 // utils
 void	free_array(char **array);

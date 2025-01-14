@@ -1,33 +1,35 @@
 #include "../../include/minishell.h"
 
-char	*remove_quotes(char *str)
+bool	update_quote_state(char c, bool *in_single_quote, bool *in_double_quote)
 {
-	char	*result;
-	int		i;
-	int		j;
-	bool	single_quote;
-	bool	double_quote;
+	if (c == '\'' && !*in_double_quote)
+	{
+		*in_single_quote = !*in_single_quote;
+		return true;
+	}
+	if (c == '\"' && !*in_single_quote)
+	{
+		*in_double_quote = !*in_double_quote;
+		return true;
+	}
+	return false;
+}
+
+char *remove_quotes(char *str)
+{
+	char *result;
+	int i = 0, j = 0;
+	bool single_quote = false, double_quote = false;
 
 	if (!str)
 		return (NULL);
-	single_quote = false;
-	double_quote = false;
 	result = malloc(ft_strlen(str) + 1);
 	if (!result)
 		return (NULL);
-	i = 0;
-	j = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'' && !double_quote)
-			single_quote = !single_quote;
-		else if (str[i] == '"' && !single_quote)
-			double_quote = !double_quote;
-		else
-		{
-			result[j] = str[i];
-			j++;
-		}
+		if (!update_quote_state(str[i], &single_quote, &double_quote))
+			result[j++] = str[i];
 		i++;
 	}
 	result[j] = '\0';

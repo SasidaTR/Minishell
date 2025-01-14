@@ -9,6 +9,7 @@
 # include <signal.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <limits.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <readline/readline.h>

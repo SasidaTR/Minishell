@@ -4,7 +4,8 @@
 int	ft_exit(t_command *commands, t_data *data)
 {
 	(void)data;
-    free_all(commands, 1);
+    free(commands->command);
+	exit(1);
 	return(0);
 }
 

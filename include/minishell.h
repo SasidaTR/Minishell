@@ -68,6 +68,5 @@ bool	handle_redirections(char *command);
 // utils
 void	sort_array(char **array, int n);
 void	free_array(char **array);
-void	free_all(t_command *commands, int exit_program);
 
 #endif

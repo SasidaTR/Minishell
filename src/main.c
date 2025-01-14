@@ -54,7 +54,10 @@ int main(int argc, char **argv, char **env)
 	{
 		commands.command = readline("Minishell> ");
 		if (!commands.command)
-			free_all(&commands, 1);
+		{
+			free(commands.command);
+			exit(1);
+		}
 		if (is_empty(commands.command))
 			continue;
 		add_history(commands.command);
@@ -66,7 +69,7 @@ int main(int argc, char **argv, char **env)
 		execute_command(&commands, env, &data);
 		free(commands.command);
 	}
-	free_all(&commands, 0);
+	free(commands.command);
 	free_array(data.env);
 	return (0);
 }

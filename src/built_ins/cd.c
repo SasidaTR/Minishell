@@ -1,15 +1,6 @@
 #include "../../include/minishell.h"
 #include <limits.h>
 
-int count_args(char **array)
-{
-	int i;
-
-	i = 0;
-	while(array[i])
-		i++;
-	return(i);
-}
 int	ft_cd(t_command *commands, t_data *data)
 {
 	if (!commands || !commands->split_command || count_args(commands->split_command) != 2)

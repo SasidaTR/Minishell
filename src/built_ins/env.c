@@ -12,8 +12,3 @@ int	ft_env(t_data *data)
 	}
 	return(0);
 }
-
-int	ft_exit(void)
-{
-	return (0);
-}

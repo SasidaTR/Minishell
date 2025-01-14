@@ -1,21 +1,21 @@
 #include "../../include/minishell.h"
 
-int	is_builtin(char **split_command, t_data *data)
+int	is_builtin(t_command *commands, t_data *data)
 {
-	if (ft_strncmp(split_command[0], "echo", ft_strlen(split_command[0])) == 0)
-		return (ft_echo(split_command), 1);
-	else if (ft_strncmp(split_command[0], "cd", ft_strlen(split_command[0])) == 0)
-		return (ft_cd(split_command), 1);
-	else if (ft_strncmp(split_command[0], "pwd", ft_strlen(split_command[0])) == 0)
+	if (ft_strncmp(commands->split_command[0], "echo", ft_strlen(commands->split_command[0])) == 0)
+		return (ft_echo(commands), 1);
+	else if (ft_strncmp(commands->split_command[0], "cd", ft_strlen(commands->split_command[0])) == 0)
+		return (ft_cd(commands), 1);
+	else if (ft_strncmp(commands->split_command[0], "pwd", ft_strlen(commands->split_command[0])) == 0)
 		return (ft_pwd(data), 1);
-	else if (ft_strncmp(split_command[0], "export", ft_strlen(split_command[0])) == 0)
-		return (ft_export(split_command, data), 1);
-	else if (ft_strncmp(split_command[0], "unset", ft_strlen(split_command[0])) == 0)
+	else if (ft_strncmp(commands->split_command[0], "export", ft_strlen(commands->split_command[0])) == 0)
+		return (ft_export(commands, data), 1);
+	else if (ft_strncmp(commands->split_command[0], "unset", ft_strlen(commands->split_command[0])) == 0)
 		return (ft_unset(), 1);
-	else if (ft_strncmp(split_command[0], "env", ft_strlen(split_command[0])) == 0)
+	else if (ft_strncmp(commands->split_command[0], "env", ft_strlen(commands->split_command[0])) == 0)
 		return (ft_env(data), 1);
-	else if (ft_strncmp(split_command[0], "exit", ft_strlen(split_command[0])) == 0)
-		return (ft_exit(), 1);
+	else if (ft_strncmp(commands->split_command[0], "exit", ft_strlen(commands->split_command[0])) == 0)
+		return (ft_exit(commands, data), 1);
 	return (0);
 }
 
@@ -28,8 +28,11 @@ void	execute_command(t_command *commands, char **env, t_data *data)
 	i = 0;
 	while (commands->commands[i])
 	{
-		if (is_builtin(&commands->split_command[i], data))
-			return ;
+		if (is_builtin(commands, data))
+		{
+			i++;
+			continue;
+		} 
 		else
 		{
 			pid = fork();

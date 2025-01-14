@@ -1,22 +1,22 @@
 #include "../../include/minishell.h"
 
 
-int ft_echo(t_command *command)
+int ft_echo(t_command *commands)
 {
 	int i;
 	int newline;
 
 	i = 1;
 	newline = 1;
-	if (command->split_command[i] && ft_strncmp(command->split_command[i], "-n", 2) == 0)
+	if (commands->split_command[i] && ft_strncmp(commands->split_command[i], "-n", 2) == 0)
 	{
 		newline = 0;
 		i++;
 	}
-	while (command->split_command[i])
+	while (commands->split_command[i])
 	{
-		printf("%s", command->split_command[i]);
-		if (command->split_command[i + 1] != NULL)
+		printf("%s", commands->split_command[i]);
+		if (commands->split_command[i + 1] != NULL)
 			printf(" ");
 		i++;
 	}

@@ -29,13 +29,13 @@ typedef struct s_data
 }			t_data;
 
 // built_ins
-int		ft_echo(t_command *command);
-int		ft_cd(t_command *command, t_data *data);
+int		ft_echo(t_command *commands);
+int		ft_cd(t_command *commands, t_data *data);
 int		ft_pwd(t_data *data);
-int		ft_export(t_command *command, t_data *data);
+int		ft_export(t_command *commands, t_data *data);
 int		ft_unset(void);
 int		ft_env(t_data *data);
-int		ft_exit(t_command *command, t_data *data);
+int		ft_exit(t_command *commands, t_data *data);
 
 // handle
 void	handle_sigint(int sig);

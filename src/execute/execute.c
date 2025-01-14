@@ -23,32 +23,50 @@ void	execute_command(t_command *commands, char **env, t_data *data)
 {
 	int		i;
 	pid_t	pid;
+	int		pipe_fd[2];
 	int		status;
+	int		in_fd = 0;
 
 	i = 0;
-	while (commands->commands[i])
+	while (commands->pipeline[i])
 	{
-		if (is_builtin(commands, data))
+		// if (is_builtin(commands, data))
+		// {
+		// 	i++;
+		// 	continue;
+		// } 
+		// else
+		// {
+		if (pipe(pipe_fd) == -1)
 		{
-			i++;
-			continue;
-		} 
-		else
-		{
-			pid = fork();
-			if (pid == 0)
-			{
-				if (execve(commands->split_command[i], commands->split_command, env) == -1)
-				{
-					perror("execve");
-					exit(EXIT_FAILURE);
-				}
-			}
-			else if (pid > 0)
-				waitpid(pid, &status, 0);
-			else
-				perror("fork");
+			perror("pipe");
+			exit(EXIT_FAILURE);
 		}
+		pid = fork();
+		if (pid == 0)
+		{
+			dup2(in_fd, STDIN_FILENO);
+			if (commands->pipeline[i + 1])
+				dup2(pipe_fd[1], STDOUT_FILENO);
+			close(pipe_fd[0]);
+			commands->split_command = ft_split(commands->pipeline[i], ' ');
+			if (is_builtin(commands, data) || 
+				execve(commands->split_command[i], commands->split_command, env) == -1)
+			{
+				perror("execve");
+				exit(EXIT_FAILURE);
+			}
+		}
+		else if (pid > 0)
+		{
+			waitpid(pid, &status, 0);
+			close(pipe_fd[1]);
+			in_fd = pipe_fd[0];
+		}
+		else
+			perror("fork");
+		// }
 		i++;
 	}
+	close(in_fd);
 }

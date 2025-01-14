@@ -1,2 +1,2 @@
-test
+Bonjour, ceci est un test. > test.txt
 [?2004hMinishell> [?2004l

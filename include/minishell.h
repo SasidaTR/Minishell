@@ -43,7 +43,7 @@ void	handle_sigint(int sig);
 void	execute_command(t_command *commands, char **env, t_data *data);
 
 // libft
-int count_args(char **array);
+int		count_args(char **array);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 void	*ft_memset(void *s, int c, size_t n);
 char	**ft_split(char *str, char c);
@@ -52,23 +52,20 @@ int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strdup(const char *s1);
 int		ft_strlen(const char *str);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
 bool	is_empty(char *command);
 bool	is_space(char c);
 
 // parsing
 bool	parsing(t_command *commands);
 char	**split_pipes(char *command);
-bool	validate_commands(char **pipeline);
-char	*remove_quotes(char *str);
 bool	update_quote_state(char c, bool *in_single_quote, bool *in_double_quote);
-void	split_command(char **result, char *command, char sep);
-int		count_segments(char *command, char sep);
+char	*remove_quotes(char *str);
+bool	handle_redirections(char *command);
 
 // utils
+void	sort_array(char **array, int n);
 void	free_array(char **array);
 void	free_all(t_command *commands, int exit_program);
-void	sort_array(char **array, int n);
-int		count_array(char **array);
-
 
 #endif

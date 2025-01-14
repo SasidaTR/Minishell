@@ -27,12 +27,3 @@ void	sort_array(char **array, int n)
 		i++;
 	}
 }
-
-int	count_array(char **array)
-{
-	int count = 0;
-
-	while (array[count])
-		count++;
-	return (count);
-}

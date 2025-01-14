@@ -1,6 +1,6 @@
 #include "../../include/minishell.h"
 
-int count_args(char **array)
+int	count_args(char **array)
 {
 	int i;
 

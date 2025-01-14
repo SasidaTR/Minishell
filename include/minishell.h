@@ -45,9 +45,10 @@ void	handle_sigint(int sig);
 void	execute_command(t_command *commands, char **env, t_data *data);
 
 // libft
-int count_args(char **array);
+int		count_args(char **array);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 void	*ft_memset(void *s, int c, size_t n);
+void	*ft_realloc(void *ptr, size_t new_size);
 char	**ft_split(char *str, char c);
 char	*ft_strchr(const char *s, int c);
 int		ft_strcmp(const char *s1, const char *s2);

@@ -28,18 +28,17 @@ int	ft_cd(t_command *commands, t_data *data)
 		return (1);
 	}
 
-	// Mise à jour du PWD dans la variable d'environnement
-	char cwd[PATH_MAX];
-	if (getcwd(cwd, sizeof(cwd)))
-	{
-		update_env(data, "PWD", cwd);
-	}
-	else
-	{
-		perror("getcwd");
-	}
+	// char cwd[PATH_MAX];
+	// if (getcwd(cwd, sizeof(cwd)))
+	// {
+	// 	update_env(data, "PWD", cwd);
+	// }
+	// else
+	// {
+	// 	perror("getcwd");
+	// }
 
 	if (data)
-		data->exit_code = 0; // Indiquer le succès
+		data->exit_code = 0;
 	return (0);
 }

@@ -38,16 +38,17 @@ void	initialize(int argc, char **argv, t_data *data)
 	(void)argc;
 	(void)argv;
 	data->env = NULL;
+	data->exit_code = 0;
 }
 
-int	main(int argc, char **argv, char **env)
+int main(int argc, char **argv, char **env)
 {
-	t_data		data;
-	t_command	commands;
+	t_data data;
+	t_command commands;
 
 	initialize(argc, argv, &data);
 	if (!get_env(&data, env))
-		return (0); // libérer quand on aura des fonctions de free
+		return (0);
 	initialize_signals();
 	while (1)
 	{
@@ -55,17 +56,17 @@ int	main(int argc, char **argv, char **env)
 		if (!commands.command)
 			free_all(&commands, 1);
 		if (is_empty(commands.command))
+			continue;
+		add_history(commands.command);
+		if (!parsing(&commands))
 		{
 			free(commands.command);
-			continue ;
+			continue;
 		}
-		add_history(commands.command);
-		if (!parsing(&commands, env, &data))
-			continue ;
-		// if (!execute())
-		// 	free_all(commands.command, 1);
-		free_all(&commands, 0);
+		execute_command(&commands, env, &data);
+		free(commands.command);
 	}
+	free_all(&commands, 0);
 	free_array(data.env);
 	return (0);
 }

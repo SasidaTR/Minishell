@@ -8,26 +8,19 @@ char	*remove_quotes(char *str)
 	bool	single_quote;
 	bool	double_quote;
 
-	if (!str)
-		return (NULL);
+	i = 0;
+	j = 0;
 	single_quote = false;
 	double_quote = false;
+	if (!str)
+		return (NULL);
 	result = malloc(ft_strlen(str) + 1);
 	if (!result)
 		return (NULL);
-	i = 0;
-	j = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'' && !double_quote)
-			single_quote = !single_quote;
-		else if (str[i] == '"' && !single_quote)
-			double_quote = !double_quote;
-		else
-		{
-			result[j] = str[i];
-			j++;
-		}
+		if (!update_quote_state(str[i], &single_quote, &double_quote))
+			result[j++] = str[i];
 		i++;
 	}
 	result[j] = '\0';
@@ -37,4 +30,19 @@ char	*remove_quotes(char *str)
 		return (NULL);
 	}
 	return (result);
+}
+
+bool	update_quote_state(char c, bool *in_single_quote, bool *in_double_quote)
+{
+	if (c == '\'' && !*in_double_quote)
+	{
+		*in_single_quote = !*in_single_quote;
+		return (true);
+	}
+	if (c == '\"' && !*in_single_quote)
+	{
+		*in_double_quote = !*in_double_quote;
+		return (true);
+	}
+	return (false);
 }

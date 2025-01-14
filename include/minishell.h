@@ -16,6 +16,7 @@
 
 typedef struct s_command
 {
+	char	***commandss;
 	char	**commands;
 	char	**split_command;
 	char	*command;
@@ -63,6 +64,7 @@ char	*remove_quotes(char *str);
 void	free_array(char **array);
 void	free_all(t_command *commands, int exit_program);
 void	sort_array(char **array, int n);
+int		count_array(char **array);
 
 
 #endif

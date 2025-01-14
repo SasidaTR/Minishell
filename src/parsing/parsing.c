@@ -37,10 +37,8 @@ bool	parsing(t_command *commands, char **env, t_data *data)
 			return (false);
 		}
 		execute_command(commands, env, data);
-		free_array(commands->split_command);
 		free(no_quote_command);
 		i++;
 	}
-	free_array(commands->commands);
 	return (true);
 }

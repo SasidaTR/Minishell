@@ -1,10 +1,9 @@
 #include "../../include/minishell.h"
 
-
-int ft_echo(t_command *commands)
+int	ft_echo(t_command *commands)
 {
-	int i;
-	int newline;
+	int	i;
+	int	newline;
 
 	i = 1;
 	newline = 1;

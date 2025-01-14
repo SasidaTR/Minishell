@@ -4,5 +4,5 @@ int	ft_export(t_command *commands, t_data *data)
 {
 	(void)commands;
 	(void)data;
-	return(0);
+	return (0);
 }

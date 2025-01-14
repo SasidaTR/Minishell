@@ -1,15 +1,12 @@
 #include "../../include/minishell.h"
 
-void	free_split(char **str)
+static void	free_split(char **str)
 {
 	int	i;
 
 	i = 0;
 	while (str[i])
-	{
-		free(str[i]);
-		i++;
-	}
+		free(str[i++]);
 	free(str);
 }
 
@@ -18,14 +15,12 @@ static int	count_characters(char *s, char c)
 	int	i;
 
 	i = 0;
-	while (s[i] != c && s[i])
-	{
+	while (s[i] && s[i] != c)
 		i++;
-	}
 	return (i);
 }
 
-int	count_words(char *str, char c)
+static int	count_words(char *str, char c)
 {
 	int	i;
 	int	count;
@@ -46,15 +41,13 @@ int	count_words(char *str, char c)
 	return (count);
 }
 
-char	*get_word(char *s, char c)
+static char	*get_word(char *s, char c)
 {
 	int		i;
 	char	*dest;
-	int		nb_characters;
 
 	i = 0;
-	nb_characters = count_characters(s, c);
-	dest = malloc(sizeof(char) * (nb_characters + 1));
+	dest = malloc(sizeof(char) * (count_characters(s, c) + 1));
 	if (!dest)
 		return (NULL);
 	while (s[i] && s[i] != c)

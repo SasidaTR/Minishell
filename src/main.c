@@ -38,6 +38,7 @@ void	initialize(int argc, char **argv, t_data *data)
 	(void)argc;
 	(void)argv;
 	data->env = NULL;
+	data->exit_code = 0;
 }
 
 int	main(int argc, char **argv, char **env)

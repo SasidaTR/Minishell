@@ -1,4 +1,5 @@
 #include "../../include/minishell.h"
+#include <limits.h>
 
 int count_args(char **array)
 {
@@ -9,16 +10,36 @@ int count_args(char **array)
 		i++;
 	return(i);
 }
-
-int	ft_cd(char **split_command)
+int	ft_cd(t_command *commands, t_data *data)
 {
-	if(!split_command || count_args(split_command) != 2)
+	if (!commands || !commands->split_command || count_args(commands->split_command) != 2)
 	{
-		printf("Usage : cd <directory>\n");
-		return(1);
+		printf("Usage: cd <directory>\n");
+		if (data)
+			data->exit_code = 1;
+		return (1);
 	}
-	if(chdir(split_command[1]) != 0)
-		return(perror("cd"), 0);
-	return(0);
-	
+
+	if (chdir(commands->split_command[1]) != 0)
+	{
+		perror("cd");
+		if (data)
+			data->exit_code = 1;
+		return (1);
+	}
+
+	// Mise à jour du PWD dans la variable d'environnement
+	char cwd[PATH_MAX];
+	if (getcwd(cwd, sizeof(cwd)))
+	{
+		update_env(data, "PWD", cwd);
+	}
+	else
+	{
+		perror("getcwd");
+	}
+
+	if (data)
+		data->exit_code = 0; // Indiquer le succès
+	return (0);
 }

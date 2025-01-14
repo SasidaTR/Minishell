@@ -25,11 +25,12 @@ typedef struct s_command
 typedef struct s_data
 {
 	char	**env;
+	int		exit_code;
 }			t_data;
 
 // built_ins
 int		ft_echo(t_command *command);
-int		ft_cd(t_command *command);
+int		ft_cd(t_command *command, t_data *data);
 int		ft_pwd(t_data *data);
 int		ft_export(t_command *command, t_data *data);
 int		ft_unset(void);

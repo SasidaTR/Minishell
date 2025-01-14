@@ -2,22 +2,20 @@
 
 int	ft_pwd(t_data *data)
 {
-	int i;
+	int	i;
 	
 	i = 0;
-	if(!data || !data->env)
+	if (!data || !data->env)
+		return (printf("Error with env"), 1);
+	while (data->env[i])
 	{
-		return(printf("Error with env"), 1);
-	}
-	while(data->env[i])
-	{
-		if(strncmp(data->env[i], "PWD=", 4) == 0)
+		if (strncmp(data->env[i], "PWD=", 4) == 0)
 		{
 			printf("%s\n", &data->env[i][4]);
-			return(0);
+			return (0);
 		}
 		i++;
 	}
 	printf("Error: PWD not found in env");
-	return(1);
+	return (1);
 }

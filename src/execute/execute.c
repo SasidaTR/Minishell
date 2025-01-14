@@ -5,7 +5,7 @@ int	is_builtin(t_command *commands, t_data *data)
 	if (ft_strncmp(commands->split_command[0], "echo", ft_strlen(commands->split_command[0])) == 0)
 		return (ft_echo(commands), 1);
 	else if (ft_strncmp(commands->split_command[0], "cd", ft_strlen(commands->split_command[0])) == 0)
-		return (ft_cd(commands), 1);
+		return (ft_cd(commands, data), 1);
 	else if (ft_strncmp(commands->split_command[0], "pwd", ft_strlen(commands->split_command[0])) == 0)
 		return (ft_pwd(data), 1);
 	else if (ft_strncmp(commands->split_command[0], "export", ft_strlen(commands->split_command[0])) == 0)

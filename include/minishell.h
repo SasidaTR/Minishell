@@ -44,6 +44,7 @@ void	handle_sigint(int sig);
 void	execute_command(t_command *commands, char **env, t_data *data);
 
 // libft
+int		count_args(char **array);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 void	*ft_memset(void *s, int c, size_t n);
 char	**ft_split(char *str, char c);

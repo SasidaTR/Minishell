@@ -3,8 +3,10 @@
 int	get_env(t_data *data, char **env)
 {
 	int	i;
+	int size;
 
 	i = 0;
+	size = 0;
 	if (env == NULL)
 		return (0);
 	while (env[i])
@@ -18,6 +20,7 @@ int	get_env(t_data *data, char **env)
 		i++;
 	}
 	data->env[i] = 0;
+	data->env_size = i;
 	return (1);
 }
 
@@ -39,6 +42,7 @@ void	initialize(int argc, char **argv, t_data *data)
 	(void)argv;
 	data->env = NULL;
 	data->exit_code = 0;
+	data->env_size = 0;
 }
 
 int main(int argc, char **argv, char **env)

@@ -11,7 +11,7 @@ int	is_builtin(t_command *commands, t_data *data)
 	else if (ft_strncmp(commands->split_command[0], "export", ft_strlen(commands->split_command[0])) == 0)
 		return (ft_export(commands, data), 1);
 	else if (ft_strncmp(commands->split_command[0], "unset", ft_strlen(commands->split_command[0])) == 0)
-		return (ft_unset(), 1);
+		return (ft_unset(commands, data), 1);
 	else if (ft_strncmp(commands->split_command[0], "env", ft_strlen(commands->split_command[0])) == 0)
 		return (ft_env(data), 1);
 	else if (ft_strncmp(commands->split_command[0], "exit", ft_strlen(commands->split_command[0])) == 0)

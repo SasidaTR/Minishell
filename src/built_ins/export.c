@@ -20,7 +20,7 @@ static int check_format(char *str)
 
 	return (1);
 }
-static int exist(char *str, char **env)
+int exist(char *str, char **env)
 {
 	int i;
 	int var_len;

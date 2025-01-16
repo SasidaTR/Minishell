@@ -2,23 +2,23 @@
 
 static int check_format(char *str)
 {
-    int i;
+	int i;
 
-    if (!str || !str[0] || (str[0] != '_' && !ft_isalpha(str[0])))
-        return (0);
+	if (!str || !str[0] || (str[0] != '_' && !ft_isalpha(str[0])))
+		return (0);
 
-    i = 1;  // Commence à partir du deuxième caractère
-    while (str[i] && str[i] != '=')
-    {
-        if (!ft_isalnum(str[i]) && str[i] != '_')
-            return (0);
-        i++;
-    }
+	i = 1; // Commence à partir du deuxième caractère
+	while (str[i] && str[i] != '=')
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (0);
+		i++;
+	}
 
-    if (str[i] == '=' && !str[i+1])
-        return (0);
+	if (str[i] == '=' && !str[i + 1])
+		return (1);
 
-    return (1);
+	return (1);
 }
 static int exist(char *str, char **env)
 {
@@ -27,76 +27,89 @@ static int exist(char *str, char **env)
 
 	i = 0;
 	var_len = 0;
-	while(str[var_len] && str[var_len] != '=')
+	while (str[var_len] && str[var_len] != '=')
 		var_len++;
-	while(env[i])
+	while (env[i])
 	{
-		if(strncmp(env[i], str, var_len) == 0 && (env[i][var_len] == '\0' || env[i][var_len] == '='))
-			return(i);
+		if (strncmp(env[i], str, var_len) == 0 && (env[i][var_len] == '\0' || env[i][var_len] == '='))
+			return (i);
 		i++;
 	}
-	return(-1);
+	return (-1);
 }
 static bool add_or_replace_env(char *str, char ***env, t_data *data)
 {
-    int pos;
-    char *new_var;
-    char **new_env;
+	int pos;
+	char *new_var;
+	char **temp;
 
-    pos = exist(str, *env);
-    new_var = ft_strdup(str);
-    if(!new_var)
-        return(false);
+	pos = exist(str, *env);
+	new_var = ft_strdup(str);
+	if (!new_var)
+	{
+		return (false);
+	}
 
-    if(pos >= 0) {
-        free((*env)[pos]);
-        (*env)[pos] = new_var;
-    } else {
-        new_env = realloc(*env, sizeof(char *) * (data->env_size + 2));
-        if (!new_env) {
-            free(new_var);
-            return (false);
-        }
-        *env = new_env;
-        (*env)[data->env_size] = new_var;
-        (*env)[data->env_size + 1] = NULL;
-        data->env_size += 2;
-    }
+	if (pos >= 0 && ft_strchr(str, '='))
+	{
+		free((*env)[pos]);
+		(*env)[pos] = new_var;
+	}
+	else
+	{
+		temp = realloc(*env, sizeof(char *) * (data->env_size + 2));
+		if (!temp)
+		{
+			free(new_var);
+			return (false);
+		}
+		*env = temp;
 
-    return true;
+		(*env)[data->env_size] = new_var;
+		(*env)[data->env_size + 1] = NULL;
+		ft_env(data);
+		data->env_size = 0;
+		while ((*env)[data->env_size])
+			data->env_size++;
+	}
+
+	return true;
 }
 
 void print_sorted_env(int size, char **env)
 {
 	char **sorted_env;
+	char *value;
 	int i;
 	int j;
 
 	i = 0;
 	sorted_env = malloc(sizeof(char *) * (size + 1));
-	if(!sorted_env)
+	if (!sorted_env)
 		return;
-	while(i < size + 1)
+	while (i < size)
 	{
-		sorted_env[i] = env[i];
+		sorted_env[i] = ft_strdup(env[i]); //modif
 		i++;
 	}
 	sorted_env[size] = NULL;
 	sort_array(sorted_env, size);
 	i = 0;
-	j = 0;
-	while(sorted_env[i])
+	while (sorted_env[i])
 	{
-		printf("declare -x ");
-		while(sorted_env[i][j] && sorted_env[i][j] != '=')
+		// printf("declare -x ");
+		j = 0;
+		while (sorted_env[i][j] && sorted_env[i][j] != '=')
 		{
-			putchar(sorted_env[i][j]);
+			ft_putchar(sorted_env[i][j]);
 			j++;
 		}
-		if(ft_strchr(sorted_env[i], '='))
-			printf("=\"%s\"\n", ft_strchr(sorted_env[i], '=') + 1);
+		value = ft_strchr(sorted_env[i], '=');
+		if (value)
+			printf("=\"%s\"\n", value + 1);
 		else
-			putchar('\n');
+			printf("\n");
+
 		i++;
 	}
 	free(sorted_env);
@@ -104,21 +117,23 @@ void print_sorted_env(int size, char **env)
 
 int ft_export(t_command *commands, t_data *data)
 {
-    int i;
+	int i;
 
-    i = 1;
-    if(!commands || !commands->split_command[1])
-        return(print_sorted_env(data->env_size, data->env), 0);
+	i = 1;
+	if (!commands || !commands->split_command[1])
+		return (print_sorted_env(data->env_size, data->env), 0);
 
-    while(commands->split_command[i]) {
-        if(!check_format(commands->split_command[i])) {
-            printf("export: %s is not a valid identifier\n", commands->split_command[i]);
-            data->exit_code = 1;
-        }
-        else if(!add_or_replace_env(commands->split_command[i], &data->env, data))
-            return(printf("export: memory allocation error\n"), 1);
-        i++;
-    }
+	while (commands->split_command[i])
+	{
+		if (!check_format(commands->split_command[i]))
+		{
+			printf("export: %s is not a valid identifier\n", commands->split_command[i]);
+			data->exit_code = 1;
+		}
+		else if (!add_or_replace_env(commands->split_command[i], &data->env, data))
+			return (printf("export: memory allocation error\n"), 1);
+		i++;
+	}
 
-    return (data->exit_code);
+	return (data->exit_code);
 }

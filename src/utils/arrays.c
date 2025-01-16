@@ -1,5 +1,19 @@
 #include "../../include/minishell.h"
 
+void	remove_elements_from_array(char **array, int index, int count)
+{
+	while (array[index + count])
+	{
+		array[index] = array[index + count];
+		index++;
+	}
+	while (array[index])
+	{
+		array[index] = NULL;
+		index++;
+	}
+}
+
 void ft_swap_array(char **a, char **b)
 {
 	char	*temp;

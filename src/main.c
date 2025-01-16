@@ -1,28 +1,31 @@
 #include "../include/minishell.h"
-
-int	get_env(t_data *data, char **env)
+int get_env(t_data *data, char **env)
 {
-	int	i;
-	int size;
+    int i = 0;
 
-	i = 0;
-	size = 0;
-	if (env == NULL)
-		return (0);
-	while (env[i])
-		i++;
-	if (!(data->env = (char**)malloc(sizeof(char *) * (i + 1))))
-		return (0);
-	i = 0;
-	while (env[i])
-	{
-		data->env[i] = ft_strdup(env[i]);
-		i++;
-	}
-	data->env[i] = 0;
-	data->env_size = i;
-	return (1);
+    if (!env)
+        return (0);
+    while (env[i])
+        i++;
+    data->env = (char**)malloc(sizeof(char *) * (i + 1));
+    if (!data->env)
+        return (0);
+    i = 0;
+    while (env[i])
+    {
+        data->env[i] = ft_strdup(env[i]);
+        if (!data->env[i])
+        {
+            free_array(data->env);
+            return (0);
+        }
+        i++;
+    }
+    data->env[i] = 0;
+    data->env_size = i;
+    return (1);
 }
+
 
 void	initialize_signals(void)
 {
@@ -59,6 +62,7 @@ int main(int argc, char **argv, char **env)
 		commands.command = readline("Minishell> ");
 		if (!commands.command)
 		{
+			free_array(data.env);
 			free(commands.command);
 			exit(1);
 		}

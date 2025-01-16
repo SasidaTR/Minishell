@@ -1,85 +1,124 @@
 #include "../../include/minishell.h"
 
-void	open_output_file(char *filename)
+int	handle_heredoc_redirection(char **cmd, int *index)
 {
-	int	fd;
+	int	pipe_fd[2];
+	char	*line;
+	size_t	len;
 
-	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd < 0)
-		perror("Minishell");
-	dup2(fd, STDOUT_FILENO);
-	close(fd);
-}
-
-void	open_input_file(char *filename)
-{
-	int	fd;
-
-	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-		perror("Minishell");
-	dup2(fd, STDIN_FILENO);
-	close(fd);
-}
-
-char	*extract_filename(char *command, int *index)
-{
-	int	start;
-	int	len;
-
-	start = *index;
+	line = NULL;
 	len = 0;
-	while (command[*index] && command[*index] != ' ' && command[*index] != '<' && command[*index] != '>')
+	if (!cmd[*index + 1])
+		return (-1);
+	if (pipe(pipe_fd) < 0)
+		return (-1);
+	while (1)
 	{
-		(*index)++;
-		len++;
-	}
-	return (ft_substr(command, start, len));
-}
-
-bool	process_redirection(char *command, int *index)
-{
-	int		i;
-	char	*filename;
-
-	i = *index + 1;
-	while (command[i] == ' ')
-		i++;
-	if (command[i] == '\0')
-		return (false);
-	filename = extract_filename(command, &i);
-	if (!filename)
-		return (false);
-	if (command[*index] == '<')
-		open_input_file(filename);
-	else if (command[*index] == '>')
-		open_output_file(filename);
-	free(filename);
-	*index = i - 1;
-	return (true);
-}
-
-bool	handle_redirections(char *command)
-{
-	int		i;
-	bool	in_single_quote;
-	bool	in_double_quote;
-
-	in_single_quote = false;
-	in_double_quote = false;
-	i = 0;
-	while (command[i])
-	{
-		update_quote_state(command[i], &in_single_quote, &in_double_quote);
-		if (!in_single_quote && !in_double_quote)
+		write(STDOUT_FILENO, "> ", 2);
+		if (getline(&line, &len, stdin) == -1)
+			break ;
+		if (line[strlen(line) - 1] == '\n')
+			line[strlen(line) - 1] = '\0';
+		if (!strcmp(line, cmd[*index + 1]))
 		{
-			if (command[i] == '<' || command[i] == '>')
-			{
-				if (!process_redirection(command, &i))
-					return (false);
-			}
+			free(line);
+			break ;
+		}
+		write(pipe_fd[1], line, strlen(line));
+	}
+	free(line);
+	close(pipe_fd[1]);
+	if (dup2(pipe_fd[0], STDIN_FILENO) < 0)
+	{
+		close(pipe_fd[0]);
+		return (-1);
+	}
+	close(pipe_fd[0]);
+	*index += 1;
+	return (0);
+}
+
+int	handle_append_redirection(char **cmd, int *index)
+{
+	int	fd;
+
+	if (!cmd[*index + 1])
+		return (-1);
+	fd = open(cmd[*index + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd < 0 || dup2(fd, STDOUT_FILENO) < 0)
+	{
+		if (fd >= 0)
+			close(fd);
+		return (-1);
+	}
+	close(fd);
+	*index += 1;
+	return (0);
+}
+
+int	handle_output_redirection(char **cmd, int *index)
+{
+	int	fd;
+
+	if (!cmd[*index + 1])
+		return (-1);
+	fd = open(cmd[*index + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd < 0 || dup2(fd, STDOUT_FILENO) < 0)
+	{
+		if (fd >= 0)
+			close(fd);
+		return (-1);
+	}
+	close(fd);
+	*index += 1;
+	return (0);
+}
+
+int	handle_input_redirection(char **cmd, int *index)
+{
+	int	fd;
+
+	if (!cmd[*index + 1])
+		return (-1);
+	fd = open(cmd[*index + 1], O_RDONLY);
+	if (fd < 0 || dup2(fd, STDIN_FILENO) < 0)
+	{
+		if (fd >= 0)
+			close(fd);
+		return (-1);
+	}
+	close(fd);
+	*index += 1;
+	return (0);
+}
+
+int	setup_redirections(char **cmd)
+{
+	int	i = 0;
+
+	while (cmd[i])
+	{
+		if (!strcmp(cmd[i], "<"))
+		{
+			if (handle_input_redirection(cmd, &i) < 0)
+				return (-1);
+		}
+		else if (!strcmp(cmd[i], ">"))
+		{
+			if (handle_output_redirection(cmd, &i) < 0)
+				return (-1);
+		}
+		else if (!strcmp(cmd[i], ">>"))
+		{
+			if (handle_append_redirection(cmd, &i) < 0)
+				return (-1);
+		}
+		else if (!strcmp(cmd[i], "<<"))
+		{
+			if (handle_heredoc_redirection(cmd, &i) < 0)
+				return (-1);
 		}
 		i++;
 	}
-	return (true);
+	return (0);
 }

@@ -19,11 +19,6 @@ bool	parsing(t_command *commands)
 		}
 		free(commands->pipeline[i]);
 		commands->pipeline[i] = cleaned_command;
-		if (!handle_redirections(commands->pipeline[i]))
-		{
-			free_array(commands->pipeline);
-			return (false);
-		}
 		i++;
 	}
 	return (true);

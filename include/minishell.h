@@ -63,7 +63,7 @@ bool	parsing(t_command *commands);
 char	**split_pipes(char *command);
 bool	update_quote_state(char c, bool *in_single_quote, bool *in_double_quote);
 char	*remove_quotes(char *str);
-bool	handle_redirections(char *command);
+int setup_redirections(char **cmd);
 
 // utils
 void	sort_array(char **array, int n);

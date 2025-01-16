@@ -30,13 +30,6 @@ void	execute_command(t_command *commands, char **env, t_data *data)
 	i = 0;
 	while (commands->pipeline[i])
 	{
-		// if (is_builtin(commands, data))
-		// {
-		// 	i++;
-		// 	continue;
-		// } 
-		// else
-		// {
 		if (pipe(pipe_fd) == -1)
 		{
 			perror("pipe");
@@ -50,8 +43,13 @@ void	execute_command(t_command *commands, char **env, t_data *data)
 				dup2(pipe_fd[1], STDOUT_FILENO);
 			close(pipe_fd[0]);
 			commands->split_command = ft_split(commands->pipeline[i], ' ');
+			if (setup_redirections(commands->split_command) < 0)
+			{
+				perror("redirection");
+				exit(EXIT_FAILURE);
+			}
 			if (is_builtin(commands, data) || 
-				execve(commands->split_command[i], commands->split_command, env) == -1)
+				execve(commands->split_command[0], commands->split_command, env) == -1)
 			{
 				perror("execve");
 				exit(EXIT_FAILURE);
@@ -65,7 +63,6 @@ void	execute_command(t_command *commands, char **env, t_data *data)
 		}
 		else
 			perror("fork");
-		// }
 		i++;
 	}
 	close(in_fd);

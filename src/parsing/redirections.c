@@ -17,14 +17,11 @@ int	handle_heredoc_redirection(char **cmd, int *index)
 		write(STDOUT_FILENO, "> ", 2);
 		if (getline(&line, &len, stdin) == -1)
 			break ;
-		if (line[strlen(line) - 1] == '\n')
-			line[strlen(line) - 1] = '\0';
-		if (!strcmp(line, cmd[*index + 1]))
-		{
-			free(line);
+		if (line[ft_strlen(line) - 1] == '\n')
+			line[ft_strlen(line) - 1] = '\0';
+		if (!ft_strcmp(line, cmd[*index + 1]))
 			break ;
-		}
-		write(pipe_fd[1], line, strlen(line));
+		write(pipe_fd[1], line, ft_strlen(line));
 	}
 	free(line);
 	close(pipe_fd[1]);
@@ -98,27 +95,36 @@ int	setup_redirections(char **cmd)
 
 	while (cmd[i])
 	{
-		if (!strcmp(cmd[i], "<"))
+		if (!ft_strcmp(cmd[i], "<"))
 		{
 			if (handle_input_redirection(cmd, &i) < 0)
 				return (-1);
+			remove_elements_from_array(cmd, i - 1, 2);
+			i--;
 		}
-		else if (!strcmp(cmd[i], ">"))
+		else if (!ft_strcmp(cmd[i], ">"))
 		{
 			if (handle_output_redirection(cmd, &i) < 0)
 				return (-1);
+			remove_elements_from_array(cmd, i - 1, 2);
+			i--;
 		}
-		else if (!strcmp(cmd[i], ">>"))
+		else if (!ft_strcmp(cmd[i], ">>"))
 		{
 			if (handle_append_redirection(cmd, &i) < 0)
 				return (-1);
+			remove_elements_from_array(cmd, i - 1, 2);
+			i--;
 		}
-		else if (!strcmp(cmd[i], "<<"))
+		else if (!ft_strcmp(cmd[i], "<<"))
 		{
 			if (handle_heredoc_redirection(cmd, &i) < 0)
 				return (-1);
+			remove_elements_from_array(cmd, i - 1, 2);
+			i--;
 		}
-		i++;
+		else
+			i++;
 	}
 	return (0);
 }

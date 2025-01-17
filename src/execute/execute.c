@@ -35,6 +35,12 @@ void	execute_command(t_command *commands, char **env, t_data *data)
 			perror("pipe");
 			exit(EXIT_FAILURE);
 		}
+		commands->split_command = ft_split(commands->pipeline[i], ' ');
+		if(is_builtin(commands, data))
+		{
+			free(commands->split_command);
+			return;
+		}
 		pid = fork();
 		if (pid == 0)
 		{

@@ -74,7 +74,7 @@ int main(int argc, char **argv, char **env)
 			free(commands.command);
 			continue;
 		}
-		execute_command(&commands, env, &data);
+		execute_command(&commands, data.env, &data);
 		free(commands.command);
 	}
 	free(commands.command);

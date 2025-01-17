@@ -44,6 +44,8 @@ int		exist(char *str, char **env);
 void	handle_sigint(int sig);
 
 // execute
+char	**get_path(char **env);
+bool	cmd_exist(char **path, char *cmd, char **env);
 void	execute_command(t_command *commands, char **env, t_data *data);
 
 // libft
@@ -54,12 +56,16 @@ int		ft_isalnum(int c);
 int		ft_isnumber(char *str);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 void	*ft_memset(void *s, int c, size_t n);
+void	ft_putendl_fd(char *s, int fd);
+void	ft_putstr_fd(char *s, int fd);
 void	ft_putchar(char c);
+void	ft_putchar_fd(char c, int fd);
 void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 char	**ft_split(char *str, char c);
 char	*ft_strchr(const char *s, int c);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strdup(const char *s1);
+char	*ft_strjoin(char const *s1, char const *s2);
 int		ft_strlen(const char *str);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_substr(char const *s, unsigned int start, size_t len);

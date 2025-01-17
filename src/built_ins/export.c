@@ -74,35 +74,46 @@ void print_sorted_env(int size, char **env)
 {
     char **sorted_env;
     char *value;
-    int i, j;
+    int i;
+    int j;
 
     sorted_env = malloc(sizeof(char *) * (size + 1));
     if (!sorted_env)
         return;
-
-    for (i = 0; i < size; i++)
+    i = 0;
+    while (i < size)
+    {
         sorted_env[i] = ft_strdup(env[i]);
+        i++;
+    }
     sorted_env[size] = NULL;
-
     sort_array(sorted_env, size);
-
-    for (i = 0; sorted_env[i]; i++)
+    i = 0;
+    while (sorted_env[i])
     {
         printf("declare -x ");
-        for (j = 0; sorted_env[i][j] && sorted_env[i][j] != '='; j++)
+        j = 0;
+        while (sorted_env[i][j] && sorted_env[i][j] != '=')
+        {
             ft_putchar(sorted_env[i][j]);
-
+            j++;
+        }
         value = ft_strchr(sorted_env[i], '=');
         if (value)
             printf("=\"%s\"\n", value + 1);
         else
             printf("\n");
+        i++;
     }
-
-    for (i = 0; i < size; i++)
+    i = 0;
+    while (i < size)
+    {
         free(sorted_env[i]);
+        i++;
+    }
     free(sorted_env);
 }
+
 int ft_export(t_command *commands, t_data *data)
 {
 	int i;

@@ -35,7 +35,7 @@ int		ft_cd(t_command *commands, t_data *data);
 int		ft_pwd(t_data *data);
 int		ft_export(t_command *commands, t_data *data);
 int		ft_unset(t_command *commands, t_data *data);
-int		ft_env(t_data *data);
+int		ft_env(t_command *commands, t_data *data);
 int		ft_exit(t_command *commands, t_data *data);
 int		exist(char *str, char **env);
 

@@ -1,4 +1,5 @@
 #include "../include/minishell.h"
+
 int get_env(t_data *data, char **env)
 {
 	int i = 0;

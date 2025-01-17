@@ -48,8 +48,10 @@ void	execute_command(t_command *commands, char **env, t_data *data);
 
 // libft
 int		count_args(char **array);
+int		ft_atoi(const char *str);
 int		ft_isalpha(int c);
 int		ft_isalnum(int c);
+int		ft_isnumber(char *str);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 void	*ft_memset(void *s, int c, size_t n);
 void	ft_putchar(char c);

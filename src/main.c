@@ -1,35 +1,34 @@
 #include "../include/minishell.h"
 int get_env(t_data *data, char **env)
 {
-    int i = 0;
+	int i = 0;
 
-    if (!env)
-        return (0);
-    while (env[i])
-        i++;
-    data->env = (char**)malloc(sizeof(char *) * (i + 1));
-    if (!data->env)
-        return (0);
-    i = 0;
-    while (env[i])
-    {
-        data->env[i] = ft_strdup(env[i]);
-        if (!data->env[i])
-        {
-            free_array(data->env);
-            return (0);
-        }
-        i++;
-    }
-    data->env[i] = 0;
-    data->env_size = i;
-    return (1);
+	if (!env)
+		return (0);
+	while (env[i])
+		i++;
+	data->env = (char **)malloc(sizeof(char *) * (i + 1));
+	if (!data->env)
+		return (0);
+	i = 0;
+	while (env[i])
+	{
+		data->env[i] = ft_strdup(env[i]);
+		if (!data->env[i])
+		{
+			free_array(data->env);
+			return (0);
+		}
+		i++;
+	}
+	data->env[i] = 0;
+	data->env_size = i;
+	return (1);
 }
 
-
-void	initialize_signals(void)
+void initialize_signals(void)
 {
-	struct sigaction	sa;
+	struct sigaction sa;
 
 	ft_memset(&sa, 0, sizeof(sa));
 	sa.sa_handler = handle_sigint;
@@ -39,7 +38,7 @@ void	initialize_signals(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	initialize(int argc, char **argv, t_data *data)
+void initialize(int argc, char **argv, t_data *data)
 {
 	(void)argc;
 	(void)argv;

@@ -37,84 +37,72 @@ int exist(char *str, char **env)
 	}
 	return (-1);
 }
-
 static bool add_or_replace_env(char *str, char ***env, t_data *data)
 {
-	int pos;
-	char *new_var;
-	char **temp;
+    int pos;
+    char *new_var;
+    char **temp;
 
-	pos = exist(str, *env);
-	new_var = ft_strdup(str);
-	if (!new_var)
-	{
-		return (false);
-	}
+    pos = exist(str, *env);
+    new_var = ft_strdup(str);
+    if (!new_var)
+        return false;
 
-	if (pos >= 0 && ft_strchr(str, '='))
-	{
-		free((*env)[pos]);
-		(*env)[pos] = new_var;
-	}
-	else
-	{
-		temp = ft_realloc(*env, data->env_size * sizeof(char *), (data->env_size + 2) * sizeof(char *));
-		if (!temp)
-		{
-			free(new_var);
-			return (false);
-		}
-		*env = temp;
+    if (pos >= 0 && ft_strchr(str, '='))
+    {
+        free((*env)[pos]);
+        (*env)[pos] = new_var;
+    }
+    else
+    {
+        temp = ft_realloc(*env, data->env_size * sizeof(char *), (data->env_size + 2) * sizeof(char *));
+        if (!temp)
+        {
+            free(new_var);
+            return false;
+        }
+        *env = temp;
+        (*env)[data->env_size] = new_var;
+        (*env)[data->env_size + 1] = NULL;
+        data->env_size++;
+    }
 
-		(*env)[data->env_size] = new_var;
-		(*env)[data->env_size + 1] = NULL;
-		ft_env(data);
-		data->env_size = 0;
-		while ((*env)[data->env_size])
-			data->env_size++;
-	}
-
-	return true;
+    return true;
 }
 
 void print_sorted_env(int size, char **env)
 {
-	char **sorted_env;
-	char *value;
-	int i;
-	int j;
+    char **sorted_env;
+    char *value;
+    int i, j;
 
-	i = 0;
-	sorted_env = malloc(sizeof(char *) * (size + 1));
-	if (!sorted_env)
-		return;
-	while (i < size)
-	{
-		sorted_env[i] = ft_strdup(env[i]); // modif
-		i++;
-	}
-	sorted_env[size] = NULL;
-	sort_array(sorted_env, size);
-	i = 0;
-	while (sorted_env[i])
-	{
-		// printf("declare -x ");
-		j = 0;
-		while (sorted_env[i][j] && sorted_env[i][j] != '=')
-		{
-			ft_putchar(sorted_env[i][j]);
-			j++;
-		}
-		value = ft_strchr(sorted_env[i], '=');
-		if (value)
-			printf("=\"%s\"\n", value + 1);
-		else
-			printf("\n");
-		i++;
-	}
-	free(sorted_env);
+    sorted_env = malloc(sizeof(char *) * (size + 1));
+    if (!sorted_env)
+        return;
+
+    for (i = 0; i < size; i++)
+        sorted_env[i] = ft_strdup(env[i]);
+    sorted_env[size] = NULL;
+
+    sort_array(sorted_env, size);
+
+    for (i = 0; sorted_env[i]; i++)
+    {
+        printf("declare -x ");
+        for (j = 0; sorted_env[i][j] && sorted_env[i][j] != '='; j++)
+            ft_putchar(sorted_env[i][j]);
+
+        value = ft_strchr(sorted_env[i], '=');
+        if (value)
+            printf("=\"%s\"\n", value + 1);
+        else
+            printf("\n");
+    }
+
+    for (i = 0; i < size; i++)
+        free(sorted_env[i]);
+    free(sorted_env);
 }
-
 int ft_export(t_command *commands, t_data *data)
 {
 	int i;

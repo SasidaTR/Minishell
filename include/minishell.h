@@ -73,11 +73,12 @@ bool	is_empty(char *command);
 bool	is_space(char c);
 
 // parsing
-bool	parsing(t_command *commands);
+bool	parsing(t_command *commands, char **env);
 char	**split_pipes(char *command);
 bool	update_quote_state(char c, bool *in_single_quote, bool *in_double_quote);
 char	*remove_quotes(char *str);
 int		setup_redirections(char **cmd);
+void	expand_variables(t_command *commands, char **env);
 
 // utils
 void	free_array(char **array);

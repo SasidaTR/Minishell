@@ -1,6 +1,6 @@
 #include "../../include/minishell.h"
 
-bool	parsing(t_command *commands)
+bool parsing(t_command *commands, char **env)
 {
 	int		i;
 	char	*cleaned_command;
@@ -21,5 +21,6 @@ bool	parsing(t_command *commands)
 		commands->pipeline[i] = cleaned_command;
 		i++;
 	}
+	expand_variables(commands, env);
 	return (true);
 }

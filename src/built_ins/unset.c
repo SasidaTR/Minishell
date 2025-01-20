@@ -1,12 +1,11 @@
 #include "../../include/minishell.h"
 
-static int check_name_format(char *str)
+static int	check_name_format(char *str)
 {
-	int i;
+	int	i;
 
 	if (!str || !str[0] || (str[0] != '_' && !ft_isalpha(str[0])))
 		return (0);
-
 	i = 1;
 	while (str[i])
 	{
@@ -17,12 +16,11 @@ static int check_name_format(char *str)
 	return (1);
 }
 
-static void delete_var(char ***env, int index, int *env_size)
+static void	delete_var(char ***env, int index, int *env_size)
 {
-	int i;
+	int	i;
 
 	free((*env)[index]);
-
 	i = index;
 	while (i < *env_size - 1)
 	{
@@ -33,10 +31,11 @@ static void delete_var(char ***env, int index, int *env_size)
 	(*env_size)--;
 }
 
-int ft_unset(t_command *commands, t_data *data)
+int	ft_unset(t_command *commands, t_data *data)
 {
-	int i;
-	int index;
+	int	i;
+	int	index;
+
 	if (!commands || !commands->split_command[1])
 	{
 		printf("unset: not enough arguments");

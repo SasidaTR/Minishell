@@ -14,7 +14,7 @@ void	remove_elements_from_array(char **array, int index, int count)
 	}
 }
 
-void ft_swap_array(char **a, char **b)
+void	ft_swap_array(char **a, char **b)
 {
 	char	*temp;
 
@@ -23,7 +23,7 @@ void ft_swap_array(char **a, char **b)
 	*b = temp;
 }
 
-void sort_array(char **array, int n)
+void	sort_array(char **array, int n)
 {
 	int	i;
 	int	j;

@@ -1,6 +1,6 @@
 #include "../../include/minishell.h"
 
-int is_builtin(t_command *commands, t_data *data)
+int	is_builtin(t_command *commands, t_data *data)
 {
 	if (ft_strncmp(commands->split_command[0], "echo", ft_strlen(commands->split_command[0])) == 0)
 		return (ft_echo(commands), 1);
@@ -19,16 +19,17 @@ int is_builtin(t_command *commands, t_data *data)
 	return (0);
 }
 
-void execute_command(t_command *commands, char **env, t_data *data)
+void	execute_command(t_command *commands, char **env, t_data *data)
 {
-	int i;
-	pid_t pid;
-	int pipe_fd[2];
-	int status;
-	int in_fd = 0;
-	char *cmd_path;
+	int		i;
+	pid_t	pid;
+	int		pipe_fd[2];
+	int		status;
+	int		in_fd;
+	char	*cmd_path;
 
 	i = 0;
+	in_fd = 0;
 	while (commands->pipeline[i])
 	{
 		if (pipe(pipe_fd) == -1)
@@ -40,7 +41,7 @@ void execute_command(t_command *commands, char **env, t_data *data)
 		if (is_builtin(commands, data))
 		{
 			free(commands->split_command);
-			return;
+			return ;
 		}
 		pid = fork();
 		if (pid == 0)
@@ -53,7 +54,7 @@ void execute_command(t_command *commands, char **env, t_data *data)
 				ft_putstr_fd("Command not found: ", STDERR_FILENO);
 				ft_putendl_fd(commands->split_command[0], STDERR_FILENO);
 				free_array(commands->split_command);
-				exit(127); // Command not found error
+				exit(127);
 			}
 			if (setup_redirections(commands->split_command) < 0)
 			{

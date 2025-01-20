@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 
-int get_env(t_data *data, char **env)
+int	get_env(t_data *data, char **env)
 {
 	int i = 0;
 
@@ -27,7 +27,7 @@ int get_env(t_data *data, char **env)
 	return (1);
 }
 
-void initialize_signals(void)
+void	initialize_signals(void)
 {
 	struct sigaction sa;
 
@@ -39,7 +39,7 @@ void initialize_signals(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void initialize(int argc, char **argv, t_data *data)
+void	initialize(int argc, char **argv, t_data *data)
 {
 	(void)argc;
 	(void)argv;
@@ -48,10 +48,10 @@ void initialize(int argc, char **argv, t_data *data)
 	data->env_size = 0;
 }
 
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
-	t_data data;
-	t_command commands;
+	t_data		data;
+	t_command	commands;
 
 	initialize(argc, argv, &data);
 	if (!get_env(&data, env))
@@ -69,7 +69,7 @@ int main(int argc, char **argv, char **env)
 		if (is_empty(commands.command))
 			continue;
 		add_history(commands.command);
-		if (!parsing(&commands))
+		if (!parsing(&commands, data.env))
 		{
 			free(commands.command);
 			continue;

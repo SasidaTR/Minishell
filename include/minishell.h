@@ -39,7 +39,6 @@ int		ft_env(t_command *commands, t_data *data);
 int		ft_exit(t_command *commands, t_data *data);
 int		exist(char *str, char **env);
 
-
 // handle
 void	handle_sigint(int sig);
 
@@ -53,15 +52,17 @@ int		count_args(char **array);
 int		ft_atoi(const char *str);
 int		ft_isalpha(int c);
 int		ft_isalnum(int c);
+int		ft_isempty(char *command);
 int		ft_isnumber(char *str);
+int		ft_isspace(char c);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 void	*ft_memset(void *s, int c, size_t n);
-void	ft_putendl_fd(char *s, int fd);
-void	ft_putstr_fd(char *s, int fd);
 void	ft_putchar(char c);
 void	ft_putchar_fd(char c, int fd);
+void	ft_putendl_fd(char *s, int fd);
+void	ft_putstr_fd(char *s, int fd);
 void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
-char	**ft_split(char *str, char c);
+char	**ft_split(char const *s, char c);
 char	*ft_strchr(const char *s, int c);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strdup(const char *s1);
@@ -69,8 +70,7 @@ char	*ft_strjoin(char const *s1, char const *s2);
 int		ft_strlen(const char *str);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
-bool	is_empty(char *command);
-bool	is_space(char c);
+
 
 // parsing
 bool	parsing(t_command *commands, char **env);

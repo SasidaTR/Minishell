@@ -1,6 +1,6 @@
 #include "../../include/minishell.h"
 
-int ft_exit(t_command *commands, t_data *data)
+int	ft_exit(t_command *commands, t_data *data)
 {
 	data->exit_code = 0;
 	printf("exit\n");

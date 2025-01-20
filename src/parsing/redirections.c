@@ -2,7 +2,7 @@
 
 int	handle_heredoc_redirection(char **cmd, int *index)
 {
-	int	pipe_fd[2];
+	int		pipe_fd[2];
 	char	*line;
 	size_t	len;
 
@@ -91,8 +91,9 @@ int	handle_input_redirection(char **cmd, int *index)
 
 int	setup_redirections(char **cmd)
 {
-	int	i = 0;
+	int	i;
 
+	i = 0;
 	while (cmd[i])
 	{
 		if (!ft_strcmp(cmd[i], "<"))

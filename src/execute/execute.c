@@ -24,7 +24,6 @@ void	execute_command(t_command *commands, char **env, t_data *data)
 	int		i;
 	pid_t	pid;
 	int		pipe_fd[2];
-	int		status;
 	int		in_fd;
 	char	*cmd_path;
 
@@ -37,18 +36,16 @@ void	execute_command(t_command *commands, char **env, t_data *data)
 			perror("pipe");
 			exit(EXIT_FAILURE);
 		}
-		commands->split_command = ft_split(commands->pipeline[i], ' ');
-		if (is_builtin(commands, data))
-		{
-			free(commands->split_command);
-			return ;
-		}
 		pid = fork();
 		if (pid == 0)
 		{
 			dup2(in_fd, STDIN_FILENO);
 			if (commands->pipeline[i + 1])
 				dup2(pipe_fd[1], STDOUT_FILENO);
+			close(pipe_fd[0]);
+			commands->split_command = ft_split(commands->pipeline[i], ' ');
+			if (is_builtin(commands, data))
+				exit(EXIT_SUCCESS);
 			if (!cmd_exist(&cmd_path, commands->split_command[0], env))
 			{
 				ft_putstr_fd("Command not found: ", STDERR_FILENO);
@@ -69,12 +66,15 @@ void	execute_command(t_command *commands, char **env, t_data *data)
 		}
 		else if (pid > 0)
 		{
-			waitpid(pid, &status, 0);
+			waitpid(pid, NULL, 0);
 			close(pipe_fd[1]);
 			in_fd = pipe_fd[0];
 		}
 		else
+		{
 			perror("fork");
+			exit(EXIT_FAILURE);
+		}
 		i++;
 	}
 	close(in_fd);

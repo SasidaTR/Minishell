@@ -46,6 +46,8 @@ void	handle_sigint(int sig);
 char	**get_path(char **env);
 bool	cmd_exist(char **path, char *cmd, char **env);
 void	execute_command(t_command *commands, char **env, t_data *data);
+int		handle_heredoc(char *delimiter);
+
 
 // libft
 int		count_args(char **array);

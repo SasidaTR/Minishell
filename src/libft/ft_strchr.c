@@ -1,14 +1,14 @@
 #include "../../include/minishell.h"
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(const char *string, int searchedChar)
 {
-	while (*s)
+	while (*string)
 	{
-		if (*s == (char)c)
-			return ((char *)s);
-		s++;
+		if (*string == (unsigned char)searchedChar)
+			return ((char *)string);
+		string++;
 	}
-	if ((char)c == '\0')
-		return ((char *)s);
+	if (*string == (unsigned char)searchedChar)
+		return ((char *)string);
 	return (NULL);
 }

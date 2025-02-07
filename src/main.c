@@ -1,84 +1,119 @@
 #include "../include/minishell.h"
 
-int	get_env(t_data *data, char **env)
+pid_t	g_signal_pid;
+
+bool	empty_line(char *line)
 {
 	int	i;
 
-	if (!env)
-		return (0);
 	i = 0;
-	while (env[i])
+	while (line[i] && ft_isspace(line[i]))
 		i++;
-	data->env = (char **)malloc(sizeof(char *) * (i + 1));
-	if (!data->env)
-		return (0);
-	i = 0;
-	while (env[i])
+	if (i == (int)ft_strlen(line))
 	{
-		data->env[i] = ft_strdup(env[i]);
-		if (!data->env[i])
-		{
-			free_array(data->env);
-			return (0);
-		}
-		i++;
+		free(line);
+		return (true);
 	}
-	data->env[i] = 0;
-	data->env_size = i;
+	return (false);
+}
+
+bool	parsing(t_data *data, char *line)
+{
+	if (open_quote(data, line))
+	{
+		free(line);
+		return (false);
+	}
+	if (!replace_dollar(&line, data) || !create_list_token(&data->token, line))
+	{
+		free(line);
+		free_all(data, ERR_MALLOC, EXT_MALLOC);
+	}
+	free(line);
+	if (data->token && data->token->prev->type == PIPE)
+	{
+		write(2, "Error: Unclosed pipe\n", 21);
+		data->exit_code = 2;
+		free_token(&data->token);
+		return (false);
+	}
+	if (!data->token || !create_list_cmd(data))
+	{
+		free_token(&data->token);
+		free_cmd(&data->commands);
+		return (false);
+	}
+	return (check_pipe(data));
+}
+
+int	make_env(t_data *data, char **env)
+{
+	t_list	*list;
+	char	path[PATH_MAX];
+	char	*tmp;
+	int		i;
+
+	if (!(*env))
+	{
+		tmp = ft_strdup("OLDPWD");
+		if (!tmp || !append(&(data->env), tmp) || getcwd(path, PATH_MAX) == NULL)
+			free_all(data, ERR_MALLOC, EXT_MALLOC);
+		tmp = ft_strjoin("PWD=", path);
+		if (!tmp || !append(&(data->env), tmp))
+			free_all(data, ERR_MALLOC, EXT_MALLOC);
+		return (1);
+	}
+	i = -1;
+	list = NULL;
+	while (env[++i])
+	{
+		tmp = ft_strdup(env[i]);
+		if (!tmp || !append(&list, tmp))
+			return (free_list(&list));
+	}
+	data->env = list;
 	return (1);
 }
 
-void	initialize_signals(void)
-{
-	struct sigaction	sa;
-
-	ft_memset(&sa, 0, sizeof(sa));
-	sa.sa_handler = handle_sigint;
-	sa.sa_flags = SA_RESTART;
-	sigemptyset(&sa.sa_mask);
-	sigaction(SIGINT, &sa, NULL);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-void	initialize(int argc, char **argv, t_data *data)
+void	init_data(int argc, char **argv, t_data *data)
 {
 	(void)argc;
 	(void)argv;
 	data->env = NULL;
+	data->token = NULL;
+	data->commands = NULL;
 	data->exit_code = 0;
-	data->env_size = 0;
+	data->pip[0] = -1;
+	data->pip[1] = -1;
+	g_signal_pid = 0;
+	signals();
 }
 
 int	main(int argc, char **argv, char **env)
 {
-	t_data		data;
-	t_command	commands;
+	t_data	data;
+	char	*command;
 
-	initialize(argc, argv, &data);
-	if (!get_env(&data, env))
-		return (0);
-	initialize_signals();
+	init_data(argc, argv, &data);
+	if (!make_env(&data, env))
+		free_all(&data, ERR_MALLOC, EXT_MALLOC);
 	while (1)
 	{
-		commands.command = readline("Minishell> ");
-		if (!commands.command)
-		{
-			free_array(data.env);
-			free(commands.command);
-			exit(1);
-		}
-		if (ft_isempty(commands.command))
+		command = readline("minishell> ");
+		if (!command)
+			free_all(&data, "exit\n", data.exit_code);
+		if (empty_line(command))
 			continue ;
-		add_history(commands.command);
-		if (!parsing(&commands, data.env))
-		{
-			free(commands.command);
+		add_history(command);
+		if (!parsing(&data, command))
 			continue ;
-		}
-		execute_command(&commands, data.env, &data);
-		free(commands.command);
+		if (!execute(&data))
+			free_all(&data, ERR_PIPE, EXT_PIPE);
+		free_cmd(&data.commands);
+		free_token(&data.token);
+		g_signal_pid = 0;
 	}
-	free(commands.command);
-	free_array(data.env);
+	rl_clear_history();
+	free_all(&data, NULL, -1);
 	return (0);
 }

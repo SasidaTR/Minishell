@@ -1,11 +1,11 @@
 #include "../../include/minishell.h"
 
-void	*ft_memset(void *s, int c, size_t n)
+void	*ft_memset(void *pointer, int value, size_t count)
 {
-	unsigned char	*ret;
+	unsigned char	*str;
 
-	ret = (unsigned char *)s;
-	while (n--)
-		ret[n] = (unsigned char)c;
-	return (ret);
+	str = pointer;
+	while (count--)
+		*str++ = (unsigned char)value;
+	return (pointer);
 }

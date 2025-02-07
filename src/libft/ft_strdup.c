@@ -1,14 +1,22 @@
 #include "../../include/minishell.h"
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup(const char *src)
 {
-	size_t	len;
-	char	*dup;
+	char	*new;
+	int		i;
 
-	len = ft_strlen(s1);
-	dup = (char *)malloc((len + 1) * sizeof(char));
-	if (!dup)
+	i = 0;
+	while (src[i])
+		i++;
+	new = malloc(i + 1);
+	if (!new)
 		return (NULL);
-	ft_memcpy(dup, s1, len + 1);
-	return (dup);
+	i = 0;
+	while (src[i])
+	{
+		new[i] = src[i];
+		i++;
+	}
+	new[i] = '\0';
+	return (new);
 }

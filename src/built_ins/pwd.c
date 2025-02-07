@@ -1,21 +1,17 @@
 #include "../../include/minishell.h"
 
-int	ft_pwd(t_data *data)
+int	ft_pwd(void)
 {
-	int	i;
-	
-	i = 0;
-	if (!data || !data->env)
-		return (printf("Error with env"), 1);
-	while (data->env[i])
+	char	cwd[PATH_MAX];
+
+	if (getcwd(cwd, PATH_MAX))
 	{
-		if (strncmp(data->env[i], "PWD=", 4) == 0)
-		{
-			printf("%s\n", &data->env[i][4]);
-			return (0);
-		}
-		i++;
+		printf("%s\n", cwd);
+		return (0);
 	}
-	printf("Error: PWD not found in env");
-	return (1);
+	else
+	{
+		perror("pwd");
+		return (1);
+	}
 }

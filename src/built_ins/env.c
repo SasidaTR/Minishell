@@ -1,19 +1,20 @@
 #include "../../include/minishell.h"
 
-int	ft_env(t_command *commands, t_data *data)
+int	ft_env(t_list *env)
 {
-	int	i;
+	t_list	*temp;
 
-	i = 0;
-	if (commands->split_command[2])
+	temp = env;
+	if (!temp)
+		return (0);
+	if (ft_strchr(temp->str, '='))
+		printf("%s\n", temp->str);
+	temp = temp->next;
+	while (temp != env)
 	{
-		printf("exit: too many arguments");
-		return (1);
-	}
-	while (data->env[i])
-	{
-		printf("%s\n", data->env[i]);
-		i++;
+		if (ft_strchr(temp->str, '='))
+			printf("%s\n", temp->str);
+		temp = temp->next;
 	}
 	return (0);
 }

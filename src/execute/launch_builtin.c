@@ -30,10 +30,11 @@ bool	launch_builtin(t_data *data, t_command *commands)
 	int	save_stdout;
 
 	save_stdout = -1;
-	if (commands->outfile >= 0)
+	if (commands->outfile >= 0 && dup2(commands->outfile, 1) == -1)
 	{
-		save_stdout = dup(1);
-		dup2(commands->outfile, 1);
+		perror("dup2");
+		data->exit_code = 1;
+		return (false);
 	}
 	exec_builtin(save_stdout, data, commands);
 	if (commands->outfile >= 0)

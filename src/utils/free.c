@@ -39,15 +39,15 @@ void	free_all(t_data *data, char *err, int ext)
 		free_token(&data->token);
 	if (data->env)
 		free_list(&data->env);
-	if (data->pip[0] && data->pip[0] != -1)
+	if (data->pip[0] >= 0)
 		close(data->pip[0]);
-	if (data->pip[1] && data->pip[1] != -1)
+	if (data->pip[1] >= 0)
 		close(data->pip[1]);
 	if (err)
 		print_error(err);
 	rl_clear_history();
 	if (!access(".heredoc.tmp", F_OK))
 		unlink(".heredoc.tmp");
-	if (ext != -1)
+	if (ext >= 0)
 		exit(ext);
 }

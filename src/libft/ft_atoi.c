@@ -1,26 +1,22 @@
 #include "../../include/minishell.h"
 
-int	ft_atoi(const char *str)
+int	ft_atoi(const char *nptr)
 {
+	int		nbr;
+	int		signe;
 	int		i;
-	long	nb;
-	int		neg;
+	char	*str;
 
 	i = 0;
-	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
+	str = (char *)nptr;
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
 		i++;
-	neg = 1;
-	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
-			neg = -1;
-		i++;
-	}
-	nb = 0;
+	signe = 1;
+	if (str[i] == '+' || str[i] == '-')
+		if (str[i++] == '-')
+			signe = -signe;
+	nbr = 0;
 	while (str[i] >= '0' && str[i] <= '9')
-	{
-		nb = nb * 10 + (str[i] - '0');
-		i++;
-	}
-	return (nb * neg);
+		nbr = nbr * 10 + (str[i++] - 48);
+	return (nbr * signe);
 }

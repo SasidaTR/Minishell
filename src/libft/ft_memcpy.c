@@ -1,15 +1,20 @@
 #include "../../include/minishell.h"
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+void	*ft_memcpy(void *destination, const void *source, size_t size)
 {
-	unsigned char		*d;
-	const unsigned char	*s;
+	unsigned char	*d;
+	unsigned char	*s;
+	size_t			i;
 
-	if (!dest && !src)
+	if (!destination || !source)
 		return (NULL);
-	d = (unsigned char *)dest;
-	s = (const unsigned char *)src;
-	while (n--)
-		*d++ = *s++;
-	return (dest);
+	d = (unsigned char *)destination;
+	s = (unsigned char *)source;
+	i = 0;
+	while (i < size)
+	{
+		d[i] = s[i];
+		i++;
+	}
+	return (destination);
 }

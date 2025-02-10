@@ -1,61 +1,128 @@
 #include "../../include/minishell.h"
 
-static int	check_name_format(char *str)
+//syntax
+static bool	syntax(char *str)
 {
 	int	i;
 
-	if (!str || !str[0] || (str[0] != '_' && !ft_isalpha(str[0])))
-		return (0);
-	i = 1;
+	if (str[0] != '_' && !ft_isalpha(str[0]))
+		return (false);
+	i = 0;
 	while (str[i])
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (0);
+			return (false);
 		i++;
 	}
-	return (1);
+	return (true);
 }
 
-static void	delete_var(char ***env, int index, int *env_size)
+//checks if identifier already in env
+static int	exist(char *str, t_list *env)
 {
-	int	i;
+	int		i;
+	int		j;
+	t_list	*tmp;
 
-	free((*env)[index]);
-	i = index;
-	while (i < *env_size - 1)
-	{
-		(*env)[i] = (*env)[i + 1];
+	if (!env)
+		return (-1);
+	i = 0;
+	while (str[i])
 		i++;
+	j = 0;
+	tmp = env;
+	if (!ft_strncmp(tmp->str, str, i))
+		return (j);
+	tmp = tmp->next;
+	j++;
+	while (tmp != env)
+	{
+		if (!ft_strncmp(tmp->str, str, i))
+			return (j);
+		tmp = tmp->next;
+		j++;
 	}
-	(*env)[*env_size - 1] = NULL;
-	(*env_size)--;
+	return (-1);
 }
 
-int	ft_unset(t_command *commands, t_data *data)
-{
-	int	i;
-	int	index;
+//static bool	unset(char *str, t_list **env)
+//{
+//	int		pos;
+//	int		i;
+//	t_list	**tmp;
 
-	if (!commands || !commands->split_command[1])
+//	if (!str || !(*str))
+//		return (false);
+//	if (!syntax(str))
+//	{
+//		print_error("unset: invalid identifier\n");
+//		return (true);
+//	}
+//	pos = exist(str, (*env));
+//	if (pos == -1)
+//		return (false);
+//	tmp = env;
+//	i = 0;
+//	while (i++ < pos)
+//		(*env) = (*env)->next;
+//	(*env)->prev->next = (*env)->next;
+//	(*env)->next->prev = (*env)->prev;
+//	free((*env)->str);
+//	free((*env));
+//	(*env) = NULL;
+//	env = tmp;
+//	return (false);
+//}
+
+static void	check_env(t_list *tmp, t_list **env)
+{
+	if (tmp == (*env))
+		(*env) = tmp->next;
+	if (tmp->next == tmp)
+		(*env) = NULL;
+}
+
+static bool	unset(char *str, t_list **env)
+{
+	int		pos;
+	int		i;
+	t_list	*tmp;
+
+	if (!str || !(*str))
+		return (false);
+	if (!syntax(str))
 	{
-		printf("unset: not enough arguments");
-		return (0);
+		print_error("unset: invalid identifier\n");
+		return (true);
 	}
-	i = 1;
-	while (commands->split_command[i])
+	pos = exist(str, (*env));
+	if (pos == -1)
+		return (false);
+	tmp = (*env);
+	i = 0;
+	while (i++ < pos)
+		tmp = tmp->next;
+	tmp->prev->next = tmp->next;
+	tmp->next->prev = tmp->prev;
+	free(tmp->str);
+	check_env(tmp, env);
+	free(tmp);
+	tmp = NULL;
+	return (false);
+}
+
+int	ft_unset(char **str, t_list **env)
+{
+	int	exit_code;
+	int	i;
+
+	exit_code = 0;
+	i = 0;
+	while (str[i])
 	{
-		if (!check_name_format(commands->split_command[i]))
-		{
-			printf("unset: %s is not a valid identifier\n", commands->split_command[i]);
-			data->exit_code = 1;
-		}
-		else
-		{
-			index = exist(commands->split_command[i], data->env);
-			if (index >= 0)
-				delete_var(&data->env, index, &data->env_size);
-		}
+		if (unset(str[i], env))
+			exit_code = 1;
 		i++;
 	}
-	return (0);
+	return (exit_code);
 }

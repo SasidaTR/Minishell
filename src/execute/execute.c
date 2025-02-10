@@ -1,81 +1,93 @@
 #include "../../include/minishell.h"
 
-int	is_builtin(t_command *commands, t_data *data)
+static void	parent_process(t_data *data, t_command *commands, int *pip)
 {
-	if (ft_strncmp(commands->split_command[0], "echo", ft_strlen(commands->split_command[0])) == 0)
-		return (ft_echo(commands), 1);
-	else if (ft_strncmp(commands->split_command[0], "cd", ft_strlen(commands->split_command[0])) == 0)
-		return (ft_cd(commands, data), 1);
-	else if (ft_strncmp(commands->split_command[0], "pwd", ft_strlen(commands->split_command[0])) == 0)
-		return (ft_pwd(data), 1);
-	else if (ft_strncmp(commands->split_command[0], "export", ft_strlen(commands->split_command[0])) == 0)
-		return (ft_export(commands, data), 1);
-	else if (ft_strncmp(commands->split_command[0], "unset", ft_strlen(commands->split_command[0])) == 0)
-		return (ft_unset(commands, data), 1);
-	else if (ft_strncmp(commands->split_command[0], "env", ft_strlen(commands->split_command[0])) == 0)
-		return (ft_env(commands, data), 1);
-	else if (ft_strncmp(commands->split_command[0], "exit", ft_strlen(commands->split_command[0])) == 0)
-		return (ft_exit(commands, data), 1);
-	return (0);
+	close(pip[1]);
+	if (commands->infile >= 0)
+		close(commands->infile);
+	if (commands->infile == -2)
+		commands->infile = pip[0];
+	if (commands->next != data->commands && commands->next->infile == -2)
+		commands->next->infile = pip[0];
+	else
+		close(pip[0]);
 }
 
-void	execute_command(t_command *commands, char **env, t_data *data)
+static bool	execute_cmd(t_data *data, t_command *commands, int *pip)
 {
-	int		i;
-	pid_t	pid;
-	int		pipe_fd[2];
-	int		in_fd;
-	char	*cmd_path;
-
-	i = 0;
-	in_fd = 0;
-	while (commands->pipeline[i])
+	g_signal_pid = fork();
+	if (g_signal_pid < 0)
+		free_all(data, ERR_FORK, EXT_FORK);
+	else if (!g_signal_pid)
 	{
-		if (pipe(pipe_fd) == -1)
-		{
-			perror("pipe");
-			exit(EXIT_FAILURE);
-		}
-		pid = fork();
-		if (pid == 0)
-		{
-			dup2(in_fd, STDIN_FILENO);
-			if (commands->pipeline[i + 1])
-				dup2(pipe_fd[1], STDOUT_FILENO);
-			close(pipe_fd[0]);
-			commands->split_command = ft_split(commands->pipeline[i], ' ');
-			if (is_builtin(commands, data))
-				exit(EXIT_SUCCESS);
-			if (!cmd_exist(&cmd_path, commands->split_command[0], env))
-			{
-				ft_putstr_fd("Command not found: ", STDERR_FILENO);
-				ft_putendl_fd(commands->split_command[0], STDERR_FILENO);
-				free_array(commands->split_command);
-				exit(127);
-			}
-			if (setup_redirections(commands->split_command) < 0)
-			{
-				perror("redirection");
-				exit(EXIT_FAILURE);
-			}
-			execve(cmd_path, commands->split_command, env);
-			perror("execve");
-			free(cmd_path);
-			free_array(commands->split_command);
-			exit(EXIT_FAILURE);
-		}
-		else if (pid > 0)
-		{
-			waitpid(pid, NULL, 0);
-			close(pipe_fd[1]);
-			in_fd = pipe_fd[0];
-		}
+		if (commands->command_param && commands->command_param[0])
+			child_process(data, commands, pip);
 		else
-		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		}
-		i++;
+			free_all(data, NULL, 0);
 	}
-	close(in_fd);
+	else
+		parent_process(data, commands, pip);
+	return (true);
+}
+
+static void	wait_all(t_data *data)
+{
+	int		status;
+	int		pid;
+	int		len;
+	t_command	*tmp;
+
+	tmp = data->commands;
+	len = len_cmd(tmp);
+	while (len--)
+	{
+		pid = waitpid(0, &status, 0);
+		if (pid == g_signal_pid)
+		{
+			if (WIFEXITED(status))
+				data->exit_code = WEXITSTATUS(status);
+		}
+		if (tmp->outfile >= 0)
+			close(tmp->outfile);
+		if (tmp->infile >= 0)
+			close(tmp->infile);
+		tmp = tmp->next;
+	}
+}
+
+bool	is_builtin(char *command)
+{
+	if (!command)
+		return (false);
+	if (!ft_strncmp("echo", command, INT_MAX) || !ft_strncmp("cd", command, INT_MAX) \
+	|| !ft_strncmp("pwd", command, INT_MAX) || !ft_strncmp("export", command, INT_MAX) \
+	|| !ft_strncmp("unset", command, INT_MAX) || !ft_strncmp("env", command, INT_MAX) \
+	|| !ft_strncmp("exit", command, INT_MAX))
+		return (true);
+	return (false);
+}
+
+bool	execute(t_data *data)
+{
+	t_command	*tmp;
+	int		*pip;
+
+	pip = data->pip;
+	tmp = data->commands;
+	if (tmp && tmp->skip_cmd == false && tmp->next == tmp && tmp->command_param[0] \
+		&& is_builtin(tmp->command_param[0]))
+		return (launch_builtin(data, tmp));
+	if (pipe(pip) == -1)
+		return (false);
+	execute_cmd(data, tmp, pip);
+	tmp = tmp->next;
+	while (tmp != data->commands)
+	{
+		if (pipe(pip) == -1)
+			return (-1);
+		execute_cmd(data, tmp, pip);
+		tmp = tmp->next;
+	}
+	wait_all(data);
+	return (true);
 }

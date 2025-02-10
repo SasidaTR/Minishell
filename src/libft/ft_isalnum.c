@@ -2,6 +2,5 @@
 
 int	ft_isalnum(int c)
 {
-	return ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z')
-		|| (c >= 'A' && c <= 'Z'));
+	return (ft_isalpha((unsigned char)c) || ft_isdigit((unsigned char)c));
 }

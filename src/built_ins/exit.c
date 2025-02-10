@@ -38,7 +38,7 @@ void	ft_exit(t_data *data, char **args)
 		ret = almost_atoi(args[1], &err);
 		if (err)
 		{
-			print_error("exit: ");
+			print_error("");
 			print_error(args[1]);
 			print_error(": numeric argument required\n");
 			free_all(data, NULL, 2);

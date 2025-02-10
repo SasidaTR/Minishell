@@ -72,7 +72,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		command = readline("minishell> ");
 		if (!command)
-			free_all(&data, "exit\n", data.exit_code);
+			free_all(&data, NULL, data.exit_code);
 		if (empty_line(command))
 			continue ;
 		add_history(command);

@@ -92,7 +92,7 @@ static bool	unset(char *str, t_list **env)
 		return (false);
 	if (!syntax(str))
 	{
-		print_error("unset: invalid identifier\n");
+		print_error("unset: not a valid identifier\n");
 		return (true);
 	}
 	pos = exist(str, (*env));

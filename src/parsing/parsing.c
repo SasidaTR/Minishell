@@ -1,26 +1,30 @@
-// #include "../../include/minishell.h"
+#include "../../include/minishell.h"
 
-// bool parsing(t_command *commands, char **env)
-// {
-// 	int		i;
-// 	char	*cleaned_command;
-
-// 	commands->pipeline = split_pipes(commands->command);
-// 	if (!commands->pipeline)
-// 		return (false);
-// 	i = 0;
-// 	while (commands->pipeline[i])
-// 	{
-// 		cleaned_command = remove_quotes(commands->pipeline[i]);
-// 		if (!cleaned_command)
-// 		{
-// 			free_array(commands->pipeline);
-// 			return (false);
-// 		}
-// 		free(commands->pipeline[i]);
-// 		commands->pipeline[i] = cleaned_command;
-// 		i++;
-// 	}
-// 	expand_variables(commands, env);
-// 	return (true);
-// }
+bool	parsing(t_data *data, char *line)
+{
+	if (open_quote(data, line))
+	{
+		free(line);
+		return (false);
+	}
+	if (!replace_dollar(&line, data) || !create_list_token(&data->token, line))
+	{
+		free(line);
+		free_all(data, ERR_MALLOC, EXT_MALLOC);
+	}
+	free(line);
+	if (data->token && data->token->prev->type == PIPE)
+	{
+		write(2, "Error: Unclosed pipe\n", 21);
+		data->exit_code = 2;
+		free_token(&data->token);
+		return (false);
+	}
+	if (!data->token || !create_list_cmd(data))
+	{
+		free_token(&data->token);
+		free_cmd(&data->commands);
+		return (false);
+	}
+	return (check_pipe(data));
+}

@@ -142,6 +142,7 @@ char	*find_cmd(t_data *data, char *sample, t_list *env);
 int		here_doc(t_data *data, char *word);
 
 // parsing
+bool	parsing(t_data *data, char *line);
 void	quoting_choice(bool *dq, bool *sq, int *index, char c);
 int		open_quote(t_data *data, char *line);
 int		exist_in_env(char *line, int *i, t_data *data);

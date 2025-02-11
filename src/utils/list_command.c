@@ -1,6 +1,7 @@
 #include "../../include/minishell.h"
 
-static int	command_new_elem(t_command **new, int infile, int outfile, char **command_param)
+static int	command_new_elem(t_command **new, int infile,
+	int outfile, char **command_param)
 {
 	(*new) = malloc(sizeof(t_command));
 	if (*new == NULL)
@@ -14,7 +15,8 @@ static int	command_new_elem(t_command **new, int infile, int outfile, char **com
 	return (1);
 }
 
-int	append_command(t_command **list, int infile, int outfile, char **command_param)
+int	append_command(t_command **list, int infile, int outfile,
+	char **command_param)
 {
 	t_command	*new;
 
@@ -70,7 +72,7 @@ void	free_command(t_command **list)
 size_t	len_command(t_command *list)
 {
 	t_command	*temp;
-	size_t	i;
+	size_t		i;
 
 	if ((list))
 	{

@@ -32,9 +32,9 @@ static bool	execute_command(t_data *data, t_command *commands, int *pip)
 
 static void	wait_all(t_data *data)
 {
-	int		status;
-	int		pid;
-	int		len;
+	int			status;
+	int			pid;
+	int			len;
 	t_command	*temp;
 
 	temp = data->commands;
@@ -42,11 +42,11 @@ static void	wait_all(t_data *data)
 	while (len--)
 	{
 		pid = waitpid(g_signal_pid, &status, 0);
-		if(pid == -1)
+		if (pid == -1)
 		{
 			perror("waitpid");
 			data->exit_code = 1;
-			break;
+			break ;
 		}
 		if (pid == g_signal_pid)
 		{
@@ -67,10 +67,13 @@ bool	is_builtin(char *command)
 {
 	if (!command)
 		return (false);
-	if (!ft_strncmp("echo", command, INT_MAX) || !ft_strncmp("cd", command, INT_MAX) \
-	|| !ft_strncmp("pwd", command, INT_MAX) || !ft_strncmp("export", command, INT_MAX) \
-	|| !ft_strncmp("unset", command, INT_MAX) || !ft_strncmp("env", command, INT_MAX) \
-	|| !ft_strncmp("exit", command, INT_MAX))
+	if (!ft_strncmp("echo", command, INT_MAX)
+		|| !ft_strncmp("cd", command, INT_MAX)
+		|| !ft_strncmp("pwd", command, INT_MAX)
+		|| !ft_strncmp("export", command, INT_MAX)
+		|| !ft_strncmp("unset", command, INT_MAX)
+		|| !ft_strncmp("env", command, INT_MAX)
+		|| !ft_strncmp("exit", command, INT_MAX))
 		return (true);
 	return (false);
 }
@@ -78,11 +81,12 @@ bool	is_builtin(char *command)
 bool	execute(t_data *data)
 {
 	t_command	*temp;
-	int		*pip;
+	int			*pip;
 
 	pip = data->pip;
 	temp = data->commands;
-	if (temp && temp->skip_cmd == false && temp->next == temp && temp->command_param[0] \
+	if (temp && temp->skip_cmd == false
+		&& temp->next == temp && temp->command_param[0]
 		&& is_builtin(temp->command_param[0]))
 		return (run_builtin(data, temp));
 	if (pipe(pip) == -1)

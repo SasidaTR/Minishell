@@ -164,7 +164,8 @@ size_t	len_list(t_list *list);
 void	clear_rl_line(void);
 void	signals(void);
 void	reset_sigquit(void);
-int		append_command(t_command **list, int infile, int outfile, char **command_param);
+int		append_command(t_command **list, int infile,
+			int outfile, char **command_param);
 void	free_command(t_command **list);
 size_t	len_command(t_command *list);
 char	**lst_to_arr(t_list *env);

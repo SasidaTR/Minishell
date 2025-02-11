@@ -41,7 +41,7 @@ void	absolute_path(char **path, char *command, t_data *data)
 	if (access((*path), F_OK))
 	{
 		write(2, (*path), ft_strlen((*path)));
-		write(2, " : command not found\n", 21);
+		write(2, " : No such file or directory\n", ft_strlen(" : No such file or directory"));
 		free(*path);
 		*path = NULL;
 	}

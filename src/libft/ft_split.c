@@ -35,11 +35,11 @@ static char	*between(char *str, char c, int index)
 	char	*word;
 	int		start;
 	int		j;
-	int		tmp;
+	int		temp;
 
 	start = index;
-	tmp = ft_strlen(str);
-	while (str[index] != c && index < tmp)
+	temp = ft_strlen(str);
+	while (str[index] != c && index < temp)
 		index++;
 	if (index == start)
 		return (NULL);

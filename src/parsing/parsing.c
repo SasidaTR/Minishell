@@ -20,10 +20,10 @@ bool	parsing(t_data *data, char *line)
 		free_token(&data->token);
 		return (false);
 	}
-	if (!data->token || !create_list_cmd(data))
+	if (!data->token || !create_list_command(data))
 	{
 		free_token(&data->token);
-		free_cmd(&data->commands);
+		free_command(&data->commands);
 		return (false);
 	}
 	return (check_pipe(data));

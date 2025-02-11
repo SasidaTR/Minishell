@@ -2,13 +2,13 @@
 
 void	*ft_calloc(size_t count, size_t size)
 {
-	unsigned char	*tmp;
+	unsigned char	*temp;
 
 	if (count && size && size > 2147483647 / count)
 		return (NULL);
-	tmp = malloc(count * size);
-	if (!tmp)
+	temp = malloc(count * size);
+	if (!temp)
 		return (NULL);
-	ft_bzero(tmp, count * size);
-	return (tmp);
+	ft_bzero(temp, count * size);
+	return (temp);
 }

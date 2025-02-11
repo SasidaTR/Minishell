@@ -1,6 +1,6 @@
 #include "../../include/minishell.h"
 
-static int	length_cmd(char *command, int *quotes)
+static int	length_command(char *command, int *quotes)
 {
 	int	i;
 
@@ -55,7 +55,7 @@ static void	copy_token(char *command, int length, char *str, int i)
 	str[i] = 0;
 }
 
-static bool	add_cmd(t_token **begin, char **command)
+static bool	add_command(t_token **begin, char **command)
 {
 	char	*str;
 	int		length;
@@ -63,7 +63,7 @@ static bool	add_cmd(t_token **begin, char **command)
 	int		i;
 
 	i = 0;
-	length = length_cmd(*command, &quotes);
+	length = length_command(*command, &quotes);
 	if (((length) - (2 * quotes)) < 0)
 		return (true);
 	str = malloc(sizeof(char) * ((length + 1) - (2 * quotes)));
@@ -111,7 +111,7 @@ bool	create_list_token(t_token **begin, char *command)
 	{
 		while (ft_isspace(*command))
 			command++;
-		if (*command && !is_special(command) && !add_cmd(begin, &command))
+		if (*command && !is_special(command) && !add_command(begin, &command))
 		{
 			if (*begin)
 				free_token(begin);

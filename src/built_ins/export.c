@@ -47,7 +47,7 @@ static int	exist(char *str, t_list *env)
 {
 	int		i;
 	int		j;
-	t_list	*tmp;
+	t_list	*temp;
 
 	if (!env)
 		return (-1);
@@ -55,18 +55,18 @@ static int	exist(char *str, t_list *env)
 	while (str[i] && str[i] != '=')
 		i++;
 	j = 0;
-	tmp = env;
-	if (!ft_strncmp(tmp->str, str, i) && (tmp->str[i] == '\0' || \
-		tmp->str[i] == '='))
+	temp = env;
+	if (!ft_strncmp(temp->str, str, i) && (temp->str[i] == '\0' || \
+		temp->str[i] == '='))
 		return (j);
-	tmp = tmp->next;
+	temp = temp->next;
 	j++;
-	while (tmp != env)
+	while (temp != env)
 	{
-		if (!ft_strncmp(tmp->str, str, i) && (tmp->str[i] == '\0' || \
-			tmp->str[i] == '='))
+		if (!ft_strncmp(temp->str, str, i) && (temp->str[i] == '\0' || \
+			temp->str[i] == '='))
 			return (j);
-		tmp = tmp->next;
+		temp = temp->next;
 		j++;
 	}
 	return (-1);

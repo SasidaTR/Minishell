@@ -13,7 +13,7 @@ static void	parent_process(t_data *data, t_command *commands, int *pip)
 		close(pip[0]);
 }
 
-static bool	execute_cmd(t_data *data, t_command *commands, int *pip)
+static bool	execute_command(t_data *data, t_command *commands, int *pip)
 {
 	g_signal_pid = fork();
 	if (g_signal_pid < 0)
@@ -35,10 +35,10 @@ static void	wait_all(t_data *data)
 	int		status;
 	int		pid;
 	int		len;
-	t_command	*tmp;
+	t_command	*temp;
 
-	tmp = data->commands;
-	len = len_cmd(tmp);
+	temp = data->commands;
+	len = len_command(temp);
 	while (len--)
 	{
 		pid = waitpid(g_signal_pid, &status, 0);
@@ -49,11 +49,11 @@ static void	wait_all(t_data *data)
 			else if (WIFSIGNALED(status))
 				data->exit_code = 128 + WTERMSIG(status);
 		}
-		if (tmp->outfile >= 0)
-			close(tmp->outfile);
-		if (tmp->infile >= 0)
-			close(tmp->infile);
-		tmp = tmp->next;
+		if (temp->outfile >= 0)
+			close(temp->outfile);
+		if (temp->infile >= 0)
+			close(temp->infile);
+		temp = temp->next;
 	}
 }
 
@@ -71,24 +71,24 @@ bool	is_builtin(char *command)
 
 bool	execute(t_data *data)
 {
-	t_command	*tmp;
+	t_command	*temp;
 	int		*pip;
 
 	pip = data->pip;
-	tmp = data->commands;
-	if (tmp && tmp->skip_cmd == false && tmp->next == tmp && tmp->command_param[0] \
-		&& is_builtin(tmp->command_param[0]))
-		return (launch_builtin(data, tmp));
+	temp = data->commands;
+	if (temp && temp->skip_cmd == false && temp->next == temp && temp->command_param[0] \
+		&& is_builtin(temp->command_param[0]))
+		return (run_builtin(data, temp));
 	if (pipe(pip) == -1)
 		return (false);
-	execute_cmd(data, tmp, pip);
-	tmp = tmp->next;
-	while (tmp != data->commands)
+	execute_command(data, temp, pip);
+	temp = temp->next;
+	while (temp != data->commands)
 	{
 		if (pipe(pip) == -1)
 			return (-1);
-		execute_cmd(data, tmp, pip);
-		tmp = tmp->next;
+		execute_command(data, temp, pip);
+		temp = temp->next;
 	}
 	wait_all(data);
 	return (true);

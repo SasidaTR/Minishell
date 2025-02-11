@@ -1,8 +1,8 @@
 #include "../../include/minishell.h"
 
-void	free_array(char **arr)
+void free_array(char **arr)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (arr && arr[i])
@@ -12,14 +12,14 @@ void	free_array(char **arr)
 	arr = NULL;
 }
 
-bool	print_error(char *str)
+bool print_error(char *str)
 {
 	if (str)
 		write(2, str, ft_strlen(str));
 	return (true);
 }
 
-bool	print_error_token(t_token *token, t_data *data)
+bool print_error_token(t_token *token, t_data *data)
 {
 	write(2, "syntax error near unexpected token ", 35);
 	write(2, "'", 1);
@@ -31,10 +31,10 @@ bool	print_error_token(t_token *token, t_data *data)
 	return (false);
 }
 
-void	free_all(t_data *data, char *err, int ext)
+void free_all(t_data *data, char *err, int ext)
 {
 	if (data->commands)
-		free_cmd(&data->commands);
+		free_command(&data->commands);
 	if (data->token)
 		free_token(&data->token);
 	if (data->env)

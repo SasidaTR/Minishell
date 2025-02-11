@@ -22,7 +22,7 @@ static int	exist(char *str, t_list *env)
 {
 	int		i;
 	int		j;
-	t_list	*tmp;
+	t_list	*temp;
 
 	if (!env)
 		return (-1);
@@ -30,16 +30,16 @@ static int	exist(char *str, t_list *env)
 	while (str[i])
 		i++;
 	j = 0;
-	tmp = env;
-	if (!ft_strncmp(tmp->str, str, i))
+	temp = env;
+	if (!ft_strncmp(temp->str, str, i))
 		return (j);
-	tmp = tmp->next;
+	temp = temp->next;
 	j++;
-	while (tmp != env)
+	while (temp != env)
 	{
-		if (!ft_strncmp(tmp->str, str, i))
+		if (!ft_strncmp(temp->str, str, i))
 			return (j);
-		tmp = tmp->next;
+		temp = temp->next;
 		j++;
 	}
 	return (-1);
@@ -49,7 +49,7 @@ static int	exist(char *str, t_list *env)
 //{
 //	int		pos;
 //	int		i;
-//	t_list	**tmp;
+//	t_list	**temp;
 
 //	if (!str || !(*str))
 //		return (false);
@@ -61,7 +61,7 @@ static int	exist(char *str, t_list *env)
 //	pos = exist(str, (*env));
 //	if (pos == -1)
 //		return (false);
-//	tmp = env;
+//	temp = env;
 //	i = 0;
 //	while (i++ < pos)
 //		(*env) = (*env)->next;
@@ -70,15 +70,15 @@ static int	exist(char *str, t_list *env)
 //	free((*env)->str);
 //	free((*env));
 //	(*env) = NULL;
-//	env = tmp;
+//	env = temp;
 //	return (false);
 //}
 
-static void	check_env(t_list *tmp, t_list **env)
+static void	check_env(t_list *temp, t_list **env)
 {
-	if (tmp == (*env))
-		(*env) = tmp->next;
-	if (tmp->next == tmp)
+	if (temp == (*env))
+		(*env) = temp->next;
+	if (temp->next == temp)
 		(*env) = NULL;
 }
 
@@ -86,7 +86,7 @@ static bool	unset(char *str, t_list **env)
 {
 	int		pos;
 	int		i;
-	t_list	*tmp;
+	t_list	*temp;
 
 	if (!str || !(*str))
 		return (false);
@@ -98,16 +98,16 @@ static bool	unset(char *str, t_list **env)
 	pos = exist(str, (*env));
 	if (pos == -1)
 		return (false);
-	tmp = (*env);
+	temp = (*env);
 	i = 0;
 	while (i++ < pos)
-		tmp = tmp->next;
-	tmp->prev->next = tmp->next;
-	tmp->next->prev = tmp->prev;
-	free(tmp->str);
-	check_env(tmp, env);
-	free(tmp);
-	tmp = NULL;
+		temp = temp->next;
+	temp->prev->next = temp->next;
+	temp->next->prev = temp->prev;
+	free(temp->str);
+	check_env(temp, env);
+	free(temp);
+	temp = NULL;
 	return (false);
 }
 

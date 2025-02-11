@@ -2,7 +2,7 @@
 
 static int	in_env(t_data *data, char *line, int size, char **str)
 {
-	char	*tmp;
+	char	*temp;
 	char	*key;
 	char	*value;
 
@@ -10,30 +10,30 @@ static int	in_env(t_data *data, char *line, int size, char **str)
 	value = get_elem_env(data->env, key);
 	if (key)
 		free(key);
-	tmp = ft_strjoin(*str, value);
+	temp = ft_strjoin(*str, value);
 	if (value)
 		free(value);
 	free(*str);
-	if (!tmp)
+	if (!temp)
 		return (0);
-	*str = tmp;
+	*str = temp;
 	return (1);
 }
 
 static int	dollar_point_interrogation(t_data *data, char **str)
 {
-	char	*tmp;
-	char	*tmp2;
+	char	*temp;
+	char	*temp2;
 
-	tmp = ft_itoa(data->exit_code);
-	if (!tmp)
+	temp = ft_itoa(data->exit_code);
+	if (!temp)
 		return (0);
-	tmp2 = ft_strjoin(*str, tmp);
-	free(tmp);
+	temp2 = ft_strjoin(*str, temp);
+	free(temp);
 	free(*str);
-	if (!tmp2)
+	if (!temp2)
 		return (0);
-	*str = tmp2;
+	*str = temp2;
 	return (1);
 }
 
@@ -64,7 +64,7 @@ int	add_dollar(char *line, int *index, char **str, t_data *data)
 int	add_char(char *c, char **str, t_data *data, int *index)
 {
 	char	char_to_str[2];
-	char	*tmp2;
+	char	*temp2;
 	int		i;
 
 	i = 0;
@@ -73,11 +73,11 @@ int	add_char(char *c, char **str, t_data *data, int *index)
 	char_to_str[0] = *c;
 	char_to_str[1] = '\0';
 	(*index)++;
-	tmp2 = ft_strjoin(*str, char_to_str);
+	temp2 = ft_strjoin(*str, char_to_str);
 	free(*str);
-	if (!tmp2)
+	if (!temp2)
 		return (0);
-	*str = tmp2;
+	*str = temp2;
 	return (1);
 }
 

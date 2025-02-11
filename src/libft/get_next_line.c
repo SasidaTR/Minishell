@@ -2,21 +2,21 @@
 
 int	how_many(t_list_gnl *list, char **line)
 {
-	t_list_gnl	*tmp;
+	t_list_gnl	*temp;
 	int			len;
 	int			i;
 
-	tmp = list;
+	temp = list;
 	len = 0;
-	while (tmp->next != list)
+	while (temp->next != list)
 	{
-		len += ft_strlen(tmp->content);
-		tmp = tmp -> next;
+		len += ft_strlen(temp->content);
+		temp = temp -> next;
 	}
 	i = -1;
-	while (tmp->content[++i])
+	while (temp->content[++i])
 	{
-		if (tmp->content[i] == '\n')
+		if (temp->content[i] == '\n')
 		{
 			++len;
 			break ;

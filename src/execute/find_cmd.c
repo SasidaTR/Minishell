@@ -19,26 +19,26 @@ int	ft_strslashjoin(char *dest, char *str, char *env, int *index)
 
 static char	*create_paths(t_list *env, int len)
 {
-	t_list	*tmp;
+	t_list	*temp;
 
-	tmp = env;
+	temp = env;
 	while (len--)
 	{
-		if (ft_strncmp(tmp->str, "PATH=", 5) == 0)
-			return (&(tmp->str[5]));
-		tmp = tmp->next;
+		if (ft_strncmp(temp->str, "PATH=", 5) == 0)
+			return (&(temp->str[5]));
+		temp = temp->next;
 	}
 	return (NULL);
 }
 
-static char	*cmd_not_found(char *sample)
+static char	*command_not_found(char *sample)
 {
 	write(2, sample, ft_strlen(sample));
 	write(2, " : command not found\n", 21);
 	return (NULL);
 }
 
-char	*find_cmd(t_data *data, char *sample, t_list *env)
+char	*find_command(t_data *data, char *sample, t_list *env)
 {
 	char		*paths;
 	char		path[PATH_MAX];
@@ -47,7 +47,7 @@ char	*find_cmd(t_data *data, char *sample, t_list *env)
 
 	paths = create_paths(env, len_list(env));
 	if (!paths || ft_strlen(sample) > PATH_MAX / 2)
-		return (cmd_not_found(sample));
+		return (command_not_found(sample));
 	i = 0;
 	len = ft_strlen(paths);
 	while (i < len)
@@ -64,5 +64,5 @@ char	*find_cmd(t_data *data, char *sample, t_list *env)
 			return (sample);
 		}
 	}
-	return (cmd_not_found(sample));
+	return (command_not_found(sample));
 }

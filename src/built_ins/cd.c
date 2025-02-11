@@ -18,18 +18,18 @@ static void	error_malloc(void)
 
 static void	update_oldpwd(t_data *data)
 {
-	t_list	*tmp;
+	t_list	*temp;
 	char	*test;
 	int		len;
 
-	tmp = data->env;
+	temp = data->env;
 	test = NULL;
-	len = len_list(tmp);
+	len = len_list(temp);
 	while (len--)
 	{
-		if (ft_strncmp(tmp->str, "PWD=", 3) == 0)
-			test = tmp->str;
-		tmp = tmp->next;
+		if (ft_strncmp(temp->str, "PWD=", 3) == 0)
+			test = temp->str;
+		temp = temp->next;
 	}
 	if (!test)
 		export("OLDPWD", &data->env);

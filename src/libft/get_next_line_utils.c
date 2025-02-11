@@ -90,7 +90,7 @@ int	write_in_list_gnl(int fd, t_list_gnl **list)
 
 int	free_list_gnl(t_list_gnl **list)
 {
-	t_list_gnl	*tmp;
+	t_list_gnl	*temp;
 	t_list_gnl	*current;
 
 	current = *list;
@@ -98,10 +98,10 @@ int	free_list_gnl(t_list_gnl **list)
 		return (0);
 	while (current->next != *list)
 	{
-		tmp = current;
+		temp = current;
 		current = current->next;
-		free(tmp->content);
-		free(tmp);
+		free(temp->content);
+		free(temp);
 	}
 	free(current->content);
 	free(current);

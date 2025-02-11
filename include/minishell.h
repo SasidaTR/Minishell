@@ -135,10 +135,10 @@ int		ft_unset(char **str, t_list **env);
 
 // execute
 bool	execute(t_data *data);
-bool	is_builtin(char *cmd);
-void	child_process(t_data *data, t_command *cmd, int *pip);
-bool	launch_builtin(t_data *data, t_command *cmd);
-char	*find_cmd(t_data *data, char *sample, t_list *env);
+bool	is_builtin(char *command);
+void	child_process(t_data *data, t_command *commands, int *pip);
+bool	run_builtin(t_data *data, t_command *commands);
+char	*find_command(t_data *data, char *sample, t_list *env);
 int		here_doc(t_data *data, char *word);
 
 // parsing
@@ -152,9 +152,9 @@ int		add_dollar(char *line, int *index, char **str, t_data *data);
 int		add_char(char *c, char **str, t_data *data, int *index);
 int		replace_dollar(char **line, t_data *data);
 char	**get_param(t_data *data, t_token *token);
-bool	create_list_cmd(t_data *data);
+bool	create_list_command(t_data *data);
 bool	get_infile(t_data *data, t_token *token, t_command *cmd);
-bool	get_outfile(t_token *token, t_command *cmd, t_data *data);
+bool	get_outfile(t_token *token, t_command *command, t_data *data);
 bool	create_list_token(t_token **begin, char *command);
 
 // utils
@@ -164,9 +164,9 @@ size_t	len_list(t_list *list);
 void	clear_rl_line(void);
 void	signals(void);
 void	reset_sigquit(void);
-int		append_cmd(t_command **list, int infile, int outfile, char **command_param);
-void	free_cmd(t_command **list);
-size_t	len_cmd(t_command *list);
+int		append_command(t_command **list, int infile, int outfile, char **command_param);
+void	free_command(t_command **list);
+size_t	len_command(t_command *list);
 char	**lst_to_arr(t_list *env);
 void	sort_array(char **arr, int len);
 void	free_array(char **arr);

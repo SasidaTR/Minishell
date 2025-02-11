@@ -15,10 +15,10 @@ static bool	check_dir(char **path, char *command, t_data *data)
 	return (true);
 }
 
-static bool	cmd_exist(char **path, t_data *data, char *command)
+static bool	command_exist(char **path, t_data *data, char *command)
 {
 	if (!ft_strchr(command, '/'))
-		*path = find_cmd(data, command, data->env);
+		*path = find_command(data, command, data->env);
 	else
 		absolute_path(path, command, data);
 	if (!(*path) && data->exit_code == -1)
@@ -66,7 +66,7 @@ static void	built(int *pip, t_command *commands, t_data *data)
 		commands->outfile = pip[1];
 	else
 		close(pip[1]);
-	launch_builtin(data, commands);
+	run_builtin(data, commands);
 }
 
 void	child_process(t_data *data, t_command *commands, int *pip)
@@ -79,7 +79,7 @@ void	child_process(t_data *data, t_command *commands, int *pip)
 		data->exit_code = 1;
 	else if (is_builtin(commands->command_param[0]))
 		built(pip, commands, data);
-	else if (cmd_exist(&path, data, commands->command_param[0]))
+	else if (command_exist(&path, data, commands->command_param[0]))
 	{
 		redirect_in_out(data, commands, pip);
 		env = lst_to_arr(data->env);

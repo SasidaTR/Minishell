@@ -3,20 +3,20 @@
 static int	count_args(t_data *data, t_token *token)
 {
 	int		count;
-	t_token	*tmp;
+	t_token	*temp;
 
 	count = 0;
-	tmp = token;
-	if (tmp->type == CMD || (tmp->type == ARG && \
-		tmp->prev != data->token->prev && tmp->prev->type > 5))
+	temp = token;
+	if (temp->type == CMD || (temp->type == ARG && \
+		temp->prev != data->token->prev && temp->prev->type > 5))
 		count ++;
-	tmp = tmp->next;
-	while (tmp != data->token && tmp->type != PIPE)
+	temp = temp->next;
+	while (temp != data->token && temp->type != PIPE)
 	{
-		if (tmp->type == CMD || (tmp->type == ARG && \
-		tmp->prev != data->token->prev && tmp->prev->type > 5))
+		if (temp->type == CMD || (temp->type == ARG && \
+		temp->prev != data->token->prev && temp->prev->type > 5))
 			count ++;
-		tmp = tmp->next;
+		temp = temp->next;
 	}
 	return (count);
 }
@@ -42,25 +42,25 @@ char	**get_param(t_data *data, t_token *token)
 {
 	char	**command_param;
 	int		i;
-	t_token	*tmp;
+	t_token	*temp;
 
 	i = 0;
 	command_param = malloc(sizeof(char *) * (count_args(data, token) + 1));
 	if (command_param == NULL)
 		return (NULL);
-	tmp = token;
-	if (tmp->type != PIPE && (tmp->type == CMD || (tmp->type == ARG && \
-		tmp->prev != data->token->prev && tmp->prev->type > 5)) && \
-		!add_to_command_param(command_param, &i, tmp->str))
+	temp = token;
+	if (temp->type != PIPE && (temp->type == CMD || (temp->type == ARG && \
+		temp->prev != data->token->prev && temp->prev->type > 5)) && \
+		!add_to_command_param(command_param, &i, temp->str))
 		return (free_command_param(command_param, i));
-	tmp = tmp->next;
-	while (tmp != data->token && tmp->type != PIPE)
+	temp = temp->next;
+	while (temp != data->token && temp->type != PIPE)
 	{
-		if ((tmp->type == CMD || (tmp->type == ARG && \
-			tmp->prev != data->token->prev && tmp->prev->type > 5)) && \
-			!add_to_command_param(command_param, &i, tmp->str))
+		if ((temp->type == CMD || (temp->type == ARG && \
+			temp->prev != data->token->prev && temp->prev->type > 5)) && \
+			!add_to_command_param(command_param, &i, temp->str))
 			return (free_command_param(command_param, i));
-		tmp = tmp->next;
+		temp = temp->next;
 	}
 	command_param[i] = NULL;
 	return (command_param);

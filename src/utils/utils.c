@@ -27,7 +27,7 @@ bool	check_pipe(t_data *data)
 	{
 		write(2, "syntax error near unexpected token '|'\n", 39);
 		free_token(&data->token);
-		free_cmd(&data->commands);
+		free_command(&data->commands);
 		return (false);
 	}
 	return (true);

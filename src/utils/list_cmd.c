@@ -1,6 +1,6 @@
 #include "../../include/minishell.h"
 
-static int	cmd_new_elem(t_command **new, int infile, int outfile, char **command_param)
+static int	command_new_elem(t_command **new, int infile, int outfile, char **command_param)
 {
 	(*new) = malloc(sizeof(t_command));
 	if (*new == NULL)
@@ -14,11 +14,11 @@ static int	cmd_new_elem(t_command **new, int infile, int outfile, char **command
 	return (1);
 }
 
-int	append_cmd(t_command **list, int infile, int outfile, char **command_param)
+int	append_command(t_command **list, int infile, int outfile, char **command_param)
 {
 	t_command	*new;
 
-	if (!cmd_new_elem(&new, infile, outfile, command_param))
+	if (!command_new_elem(&new, infile, outfile, command_param))
 		return (0);
 	if (!(*list))
 	{
@@ -36,20 +36,20 @@ int	append_cmd(t_command **list, int infile, int outfile, char **command_param)
 	return (1);
 }
 
-static void	free_all_cmd(t_command *tmp)
+static void	free_all_command(t_command *temp)
 {
-	if (tmp->infile > 0)
-		close(tmp->infile);
-	tmp->infile = -2;
-	if (tmp->outfile > 0)
-		close(tmp->outfile);
-	tmp->outfile = -2;
-	free_array(tmp->command_param);
+	if (temp->infile > 0)
+		close(temp->infile);
+	temp->infile = -2;
+	if (temp->outfile > 0)
+		close(temp->outfile);
+	temp->outfile = -2;
+	free_array(temp->command_param);
 }
 
-void	free_cmd(t_command **list)
+void	free_command(t_command **list)
 {
-	t_command	*tmp;
+	t_command	*temp;
 	t_command	*current;
 
 	if (!(*list))
@@ -57,29 +57,29 @@ void	free_cmd(t_command **list)
 	current = *list;
 	while (current->next != *list)
 	{
-		tmp = current;
+		temp = current;
 		current = current->next;
-		free_all_cmd(tmp);
-		free(tmp);
+		free_all_command(temp);
+		free(temp);
 	}
-	free_all_cmd(current);
+	free_all_command(current);
 	free(current);
 	*list = NULL;
 }
 
-size_t	len_cmd(t_command *list)
+size_t	len_command(t_command *list)
 {
-	t_command	*tmp;
+	t_command	*temp;
 	size_t	i;
 
 	if ((list))
 	{
-		tmp = list;
+		temp = list;
 		i = 1;
-		while (tmp->next != list)
+		while (temp->next != list)
 		{
 			++i;
-			tmp = tmp->next;
+			temp = temp->next;
 		}
 		return (i);
 	}

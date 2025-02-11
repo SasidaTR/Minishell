@@ -44,7 +44,7 @@ int	append_token(t_token **list, char *str, int type)
 
 void	free_token(t_token **list)
 {
-	t_token	*tmp;
+	t_token	*temp;
 	t_token	*current;
 
 	if (!(*list))
@@ -52,10 +52,10 @@ void	free_token(t_token **list)
 	current = *list;
 	while (current->next != *list)
 	{
-		tmp = current;
+		temp = current;
 		current = current->next;
-		free(tmp->str);
-		free(tmp);
+		free(temp->str);
+		free(temp);
 	}
 	free(current->str);
 	free(current);

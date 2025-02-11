@@ -2,7 +2,7 @@
 
 int	free_list(t_list **list)
 {
-	t_list	*tmp;
+	t_list	*temp;
 	t_list	*current;
 
 	if (!(*list))
@@ -10,10 +10,10 @@ int	free_list(t_list **list)
 	current = *list;
 	while (current->next != *list)
 	{
-		tmp = current;
+		temp = current;
 		current = current->next;
-		free(tmp->str);
-		free(tmp);
+		free(temp->str);
+		free(temp);
 	}
 	free(current->str);
 	free(current);
@@ -41,17 +41,17 @@ static void	add_first(t_list **list, t_list *new)
 
 size_t	len_list(t_list *list)
 {
-	t_list	*tmp;
+	t_list	*temp;
 	size_t	i;
 
 	if ((list))
 	{
-		tmp = list;
+		temp = list;
 		i = 1;
-		while (tmp->next != list)
+		while (temp->next != list)
 		{
 			++i;
-			tmp = tmp->next;
+			temp = temp->next;
 		}
 		return (i);
 	}

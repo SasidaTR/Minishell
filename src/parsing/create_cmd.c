@@ -1,8 +1,8 @@
 #include "../../include/minishell.h"
 
-static bool	fill_cmd(t_data *data, t_token *tmp)
+static bool	fill_command(t_data *data, t_token *temp)
 {
-	if (!get_infile(data, tmp, data->commands->prev) && \
+	if (!get_infile(data, temp, data->commands->prev) && \
 		data->commands->prev->infile != -1)
 		return (false);
 	if (data->commands->prev->infile == -1)
@@ -11,7 +11,7 @@ static bool	fill_cmd(t_data *data, t_token *tmp)
 		data->commands->prev->outfile = -1;
 		return (true);
 	}
-	if (!get_outfile(tmp, data->commands->prev, data) && data->commands->prev->outfile \
+	if (!get_outfile(temp, data->commands->prev, data) && data->commands->prev->outfile \
 		!= -1)
 		return (false);
 	if (data->commands->prev->outfile == -1)
@@ -22,17 +22,17 @@ static bool	fill_cmd(t_data *data, t_token *tmp)
 		data->commands->prev->infile = -1;
 		return (true);
 	}
-	data->commands->prev->command_param = get_param(data, tmp);
+	data->commands->prev->command_param = get_param(data, temp);
 	if (!data->commands->prev->command_param)
 		free_all(data, ERR_MALLOC, EXT_MALLOC);
 	return (true);
 }
 
-static bool	norm(t_data *data, t_token *tmp)
+static bool	norm(t_data *data, t_token *temp)
 {
-	if (!append_cmd(&data->commands, -2, -2, NULL))
+	if (!append_command(&data->commands, -2, -2, NULL))
 		free_all(data, ERR_MALLOC, EXT_MALLOC);
-	if (!fill_cmd(data, tmp))
+	if (!fill_command(data, temp))
 	{
 		data->exit_code = 2;
 		return (false);
@@ -40,22 +40,22 @@ static bool	norm(t_data *data, t_token *tmp)
 	return (true);
 }
 
-bool	create_list_cmd(t_data *data)
+bool	create_list_command(t_data *data)
 {
-	t_token	*tmp;
+	t_token	*temp;
 
-	tmp = data->token;
-	if (!norm(data, tmp))
+	temp = data->token;
+	if (!norm(data, temp))
 		return (false);
-	tmp = tmp->next;
-	while (tmp != data->token)
+	temp = temp->next;
+	while (temp != data->token)
 	{
-		if (tmp->prev->type == PIPE)
+		if (temp->prev->type == PIPE)
 		{
-			if (!norm(data, tmp))
+			if (!norm(data, temp))
 				return (false);
 		}
-		tmp = tmp->next;
+		temp = temp->next;
 	}
 	return (true);
 }

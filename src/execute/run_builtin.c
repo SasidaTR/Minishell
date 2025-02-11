@@ -25,7 +25,7 @@ static void	exec_builtin(int save_stdout, t_data *data, t_command *commands)
 	}
 }
 
-bool	launch_builtin(t_data *data, t_command *commands)
+bool	run_builtin(t_data *data, t_command *commands)
 {
 	int	save_stdout;
 

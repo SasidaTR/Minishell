@@ -21,16 +21,16 @@ int	make_env(t_data *data, char **env)
 {
 	t_list	*list;
 	char	path[PATH_MAX];
-	char	*tmp;
+	char	*temp;
 	int		i;
 
 	if (!(*env))
 	{
-		tmp = ft_strdup("OLDPWD");
-		if (!tmp || !append(&(data->env), tmp) || getcwd(path, PATH_MAX) == NULL)
+		temp = ft_strdup("OLDPWD");
+		if (!temp || !append(&(data->env), temp) || getcwd(path, PATH_MAX) == NULL)
 			free_all(data, ERR_MALLOC, EXT_MALLOC);
-		tmp = ft_strjoin("PWD=", path);
-		if (!tmp || !append(&(data->env), tmp))
+		temp = ft_strjoin("PWD=", path);
+		if (!temp || !append(&(data->env), temp))
 			free_all(data, ERR_MALLOC, EXT_MALLOC);
 		return (1);
 	}
@@ -38,8 +38,8 @@ int	make_env(t_data *data, char **env)
 	list = NULL;
 	while (env[++i])
 	{
-		tmp = ft_strdup(env[i]);
-		if (!tmp || !append(&list, tmp))
+		temp = ft_strdup(env[i]);
+		if (!temp || !append(&list, temp))
 			return (free_list(&list));
 	}
 	data->env = list;
@@ -80,7 +80,7 @@ int	main(int argc, char **argv, char **env)
 			continue ;
 		if (!execute(&data))
 			free_all(&data, ERR_PIPE, EXT_PIPE);
-		free_cmd(&data.commands);
+		free_command(&data.commands);
 		free_token(&data.token);
 		g_signal_pid = 0;
 	}

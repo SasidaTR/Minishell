@@ -18,88 +18,88 @@ static int	open_file(t_data *data, char *filename, int type)
 	return (fd);
 }
 
-static bool	get_in(t_data *data, t_token *tmp, t_command *cmd)
+static bool	get_in(t_data *data, t_token *temp, t_command *command)
 {
-	if (tmp->type == INPUT)
+	if (temp->type == INPUT)
 	{
-		if (cmd->infile >= 0)
-			close(cmd->infile);
-		if (tmp == tmp->next || tmp->next->type <= 5)
-			return (print_error_token(tmp, data));
-		cmd->infile = open_file(data, tmp->next->str, INPUT);
-		if (cmd->infile == -1)
+		if (command->infile >= 0)
+			close(command->infile);
+		if (temp == temp->next || temp->next->type <= 5)
+			return (print_error_token(temp, data));
+		command->infile = open_file(data, temp->next->str, INPUT);
+		if (command->infile == -1)
 			return (false);
 	}
-	else if (tmp->type == HEREDOC)
+	else if (temp->type == HEREDOC)
 	{
-		if (cmd->infile >= 0)
-			close(cmd->infile);
-		if (tmp == tmp->next || tmp->next->type <= 5)
-			return (print_error_token(tmp, data));
-		cmd->infile = open_file(data, tmp->next->str, HEREDOC);
-		if (cmd->infile == -1)
+		if (command->infile >= 0)
+			close(command->infile);
+		if (temp == temp->next || temp->next->type <= 5)
+			return (print_error_token(temp, data));
+		command->infile = open_file(data, temp->next->str, HEREDOC);
+		if (command->infile == -1)
 			return (false);
 	}
 	return (true);
 }
 
-bool	get_infile(t_data *data, t_token *token, t_command *cmd)
+bool	get_infile(t_data *data, t_token *token, t_command *command)
 {
-	t_token	*tmp;
+	t_token	*temp;
 
-	tmp = token;
-	if (tmp->type != PIPE && !get_in(data, tmp, cmd))
+	temp = token;
+	if (temp->type != PIPE && !get_in(data, temp, command))
 		return (false);
-	if (tmp->type == PIPE)
+	if (temp->type == PIPE)
 		return (true);
-	tmp = tmp->next;
-	while (tmp->type != PIPE && tmp != data->token)
+	temp = temp->next;
+	while (temp->type != PIPE && temp != data->token)
 	{
-		if (!get_in(data, tmp, cmd))
+		if (!get_in(data, temp, command))
 			return (false);
-		tmp = tmp->next;
+		temp = temp->next;
 	}
 	return (true);
 }
 
-static bool	get_out(t_token *tmp, t_command *cmd, t_data *data)
+static bool	get_out(t_token *temp, t_command *command, t_data *data)
 {
-	if (tmp->type == TRUNC)
+	if (temp->type == TRUNC)
 	{
-		if (cmd->outfile >= 0)
-			close(cmd->outfile);
-		if (tmp == tmp->next || tmp->next->type <= 5)
-			return (print_error_token(tmp, data));
-		cmd->outfile = open_file(NULL, tmp->next->str, TRUNC);
-		if (cmd->outfile == -1)
+		if (command->outfile >= 0)
+			close(command->outfile);
+		if (temp == temp->next || temp->next->type <= 5)
+			return (print_error_token(temp, data));
+		command->outfile = open_file(NULL, temp->next->str, TRUNC);
+		if (command->outfile == -1)
 			return (false);
 	}
-	else if (tmp->type == APPEND)
+	else if (temp->type == APPEND)
 	{
-		if (cmd->outfile >= 0)
-			close(cmd->outfile);
-		if (tmp == tmp->next || tmp->next->type <= 5)
-			return (print_error_token(tmp, data));
-		cmd->outfile = open_file(NULL, tmp->next->str, APPEND);
-		if (cmd->outfile == -1)
+		if (command->outfile >= 0)
+			close(command->outfile);
+		if (temp == temp->next || temp->next->type <= 5)
+			return (print_error_token(temp, data));
+		command->outfile = open_file(NULL, temp->next->str, APPEND);
+		if (command->outfile == -1)
 			return (false);
 	}
 	return (true);
 }
 
-bool	get_outfile(t_token *token, t_command *cmd, t_data *data)
+bool	get_outfile(t_token *token, t_command *command, t_data *data)
 {
-	t_token	*tmp;
+	t_token	*temp;
 
-	tmp = token;
-	if (tmp->type != PIPE && !get_out(tmp, cmd, data))
+	temp = token;
+	if (temp->type != PIPE && !get_out(temp, command, data))
 		return (false);
-	tmp = tmp->next;
-	while (tmp != data->token && tmp->type != PIPE)
+	temp = temp->next;
+	while (temp != data->token && temp->type != PIPE)
 	{
-		if (!get_out(tmp, cmd, data))
+		if (!get_out(temp, command, data))
 			return (false);
-		tmp = tmp->next;
+		temp = temp->next;
 	}
 	return (true);
 }

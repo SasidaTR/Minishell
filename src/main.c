@@ -1,8 +1,8 @@
 #include "../include/minishell.h"
 
-pid_t   g_signal_pid;
+pid_t g_signal_pid;
 
-bool    empty_line(char *line)
+bool empty_line(char *line)
 {
     int i;
 
@@ -19,11 +19,11 @@ bool    empty_line(char *line)
 
 int make_env(t_data *data, char **env)
 {
-    t_list  *list;
-    char    path[PATH_MAX];
-    char    *temp;
-    int     i;
-    
+    t_list *list;
+    char path[PATH_MAX];
+    char *temp;
+    int i;
+
     i = 0;
     list = NULL;
     if (!(*env))
@@ -46,7 +46,7 @@ int make_env(t_data *data, char **env)
     return (1);
 }
 
-void    init_data(int argc, char **argv, t_data *data)
+void init_data(int argc, char **argv, t_data *data)
 {
     (void)argc;
     (void)argv;

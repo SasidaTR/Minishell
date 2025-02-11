@@ -1,25 +1,26 @@
 #include "../../include/minishell.h"
 
-static bool	fill_command(t_data *data, t_token *temp)
+static bool fill_command(t_data *data, t_token *temp)
 {
-	if (!get_infile(data, temp, data->commands->prev) && \
+	if (!get_infile(data, temp, data->commands->prev) &&
 		data->commands->prev->infile != -1)
 		return (false);
 	if (data->commands->prev->infile == -1)
 	{
 		data->commands->prev->skip_cmd = true;
 		data->commands->prev->outfile = -1;
+		data->exit_code = 1;
 		return (true);
 	}
-	if (!get_outfile(temp, data->commands->prev, data) && data->commands->prev->outfile \
-		!= -1)
+	if (!get_outfile(temp, data->commands->prev, data) && data->commands->prev->outfile != -1)
 		return (false);
 	if (data->commands->prev->outfile == -1)
 	{
 		if (data->commands->prev->infile >= 0)
-			close (data->commands->prev->infile);
+			close(data->commands->prev->infile);
 		data->commands->prev->skip_cmd = true;
 		data->commands->prev->infile = -1;
+		data->exit_code = 1;
 		return (true);
 	}
 	data->commands->prev->command_param = get_param(data, temp);
@@ -28,21 +29,22 @@ static bool	fill_command(t_data *data, t_token *temp)
 	return (true);
 }
 
-static bool	norm(t_data *data, t_token *temp)
+static bool norm(t_data *data, t_token *temp)
 {
 	if (!append_command(&data->commands, -2, -2, NULL))
 		free_all(data, ERR_MALLOC, EXT_MALLOC);
 	if (!fill_command(data, temp))
 	{
-		data->exit_code = 2;
+		if (data->exit_code == 0)
+			data->exit_code = 1;
 		return (false);
 	}
 	return (true);
 }
 
-bool	create_list_command(t_data *data)
+bool create_list_command(t_data *data)
 {
-	t_token	*temp;
+	t_token *temp;
 
 	temp = data->token;
 	if (!norm(data, temp))

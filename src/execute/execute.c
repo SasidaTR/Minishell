@@ -80,7 +80,10 @@ bool	execute(t_data *data)
 		&& is_builtin(temp->command_param[0]))
 		return (run_builtin(data, temp));
 	if (pipe(pip) == -1)
+	{
+		data->exit_code = 1;
 		return (false);
+	}
 	execute_command(data, temp, pip);
 	temp = temp->next;
 	while (temp != data->commands)

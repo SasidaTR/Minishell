@@ -62,22 +62,18 @@ static void	redirect_in_out(t_data *data, t_command *commands, int *pip)
 	close(pip[1]);
 }
 
-static void built(int *pip, t_command *commands, t_data *data)
+static void	built(int *pip, t_command *commands, t_data *data)
 {
-    close(pip[0]);
-
-    // Redirection du pipe si nécessaire
-    if (commands->outfile < 0 && commands->next != data->commands) {
-        commands->outfile = pip[1];
-    } else {
-        close(pip[1]);
-    }
-    // Vérification si la commande builtin a échoué
-    if (!run_builtin(data, commands)) 
+	close(pip[0]);
+	if (commands->outfile < 0 && commands->next != data->commands)
+		commands->outfile = pip[1];
+	else
+		close(pip[1]);
+	if (!run_builtin(data, commands))
 	{
-        data->exit_code = 1;
-        free_all(data, NULL, 1);
-    }
+		data->exit_code = 1;
+		free_all(data, NULL, 1);
+	}
 }
 
 void	child_process(t_data *data, t_command *commands, int *pip)

@@ -24,26 +24,27 @@ static void	exec_builtin(int save_stdout, t_data *data, t_command *commands)
 		ft_exit(data, commands->command_param);
 	}
 }
-bool run_builtin(t_data *data, t_command *commands)
-{
-    int save_stdout;
 
-    save_stdout = -1;
-    if (commands->outfile >= 0)
-    {
-        save_stdout = dup(STDOUT_FILENO);  // Sauvegarde de l'ancienne sortie
-        if (dup2(commands->outfile, STDOUT_FILENO) == -1)
-        {
-            perror("dup2");
-            data->exit_code = 1;
-            return false;
-        }
-    }
-    exec_builtin(save_stdout, data, commands);
-    if (commands->outfile >= 0)
-    {
-        dup2(save_stdout, STDOUT_FILENO);  // Restauration de la sortie standard
-        close(save_stdout);  // Fermeture de l'ancien descripteur de fichier
-    }
-    return true;
+bool	run_builtin(t_data *data, t_command *commands)
+{
+	int	save_stdout;
+
+	save_stdout = -1;
+	if (commands->outfile >= 0)
+	{
+		save_stdout = dup(STDOUT_FILENO);
+		if (dup2(commands->outfile, STDOUT_FILENO) == -1)
+		{
+			perror("dup2");
+			data->exit_code = 1;
+			return (false);
+		}
+	}
+	exec_builtin(save_stdout, data, commands);
+	if (commands->outfile >= 0)
+	{
+		dup2(save_stdout, STDOUT_FILENO);
+		close(save_stdout);
+	}
+	return (true);
 }

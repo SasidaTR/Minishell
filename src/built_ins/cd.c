@@ -76,7 +76,7 @@ int	ft_cd(t_data *data, char **params)
 			perror(params[1]);
 		return (res);
 	}
-	else if(count_arg(params) > 2)
+	else if (count_arg(params) > 2)
 		print_error(" too many arguments\n");
 	return (1);
 }

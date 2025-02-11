@@ -42,6 +42,12 @@ static void	wait_all(t_data *data)
 	while (len--)
 	{
 		pid = waitpid(g_signal_pid, &status, 0);
+		if(pid == -1)
+		{
+			perror("waitpid");
+			data->exit_code = 1;
+			break;
+		}
 		if (pid == g_signal_pid)
 		{
 			if (WIFEXITED(status))

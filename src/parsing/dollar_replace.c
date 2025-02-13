@@ -40,7 +40,7 @@ static int	dollar_point_interrogation(t_data *data, char **str)
 int	add_char(char *c, char **str, t_data *data, int *index)
 {
 	char	char_to_str[2];
-	char	*temp2;
+	char	*temp;
 	int		i;
 
 	i = 0;
@@ -49,11 +49,11 @@ int	add_char(char *c, char **str, t_data *data, int *index)
 	char_to_str[0] = *c;
 	char_to_str[1] = '\0';
 	(*index)++;
-	temp2 = ft_strjoin(*str, char_to_str);
+	temp = ft_strjoin(*str, char_to_str);
 	free(*str);
-	if (!temp2)
+	if (!temp)
 		return (0);
-	*str = temp2;
+	*str = temp;
 	return (1);
 }
 
@@ -94,10 +94,9 @@ int	replace_dollar(char **line, t_data *data)
 	while ((*line)[i])
 	{
 		quoting_choice(&dq, &data->sq, NULL, (*line)[i]);
-		if ((*line)[i] && (*line)[i + 1] && (*line)[i] == '$' &&
-			((*line)[i + 1] != '\'' && (*line)[i + 1] != '"') &&
-			(ft_isalpha((*line)[i + 1]) || (*line)[i + 1] == '?' ||
-			(*line)[i + 1] == '_') && !data->sq &&
+		if ((*line)[i] == '$' && (*line)[i + 1] && ((*line)[i + 1] != '\'' &&
+			(*line)[i + 1] != '"') && (ft_isalpha((*line)[i + 1]) ||
+			(*line)[i + 1] == '?' || (*line)[i + 1] == '_') && !data->sq &&
 			!add_dollar((*line), &i, &str, data))
 			return (0);
 		if ((*line)[i] && !add_char(&(*line)[i], &str, data, &i))

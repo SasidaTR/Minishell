@@ -1,18 +1,18 @@
 #include "../../include/minishell.h"
 
-static int	in_env(t_data *data, char *line, int size, char **str)
+int	add_char(char *c, char **str, t_data *data, int *index)
 {
+	char	char_to_str[2];
 	char	*temp;
-	char	*key;
-	char	*value;
+	int		i;
 
-	key = get_dollar_word(line, size);
-	value = get_elem_env(data->env, key);
-	if (key)
-		free(key);
-	temp = ft_strjoin(*str, value);
-	if (value)
-		free(value);
+	i = 0;
+	if (c[i] == '$' && !data->sq && exist_in_env(c, &i, data))
+		return (1);
+	char_to_str[0] = *c;
+	char_to_str[1] = '\0';
+	(*index)++;
+	temp = ft_strjoin(*str, char_to_str);
 	free(*str);
 	if (!temp)
 		return (0);
@@ -37,19 +37,19 @@ static int	dollar_point_interrogation(t_data *data, char **str)
 	return (1);
 }
 
-int	add_char(char *c, char **str, t_data *data, int *index)
+static int	in_env(t_data *data, char *line, int size, char **str)
 {
-	char	char_to_str[2];
 	char	*temp;
-	int		i;
+	char	*key;
+	char	*value;
 
-	i = 0;
-	if (c[i] == '$' && !data->sq && exist_in_env(c, &i, data))
-		return (1);
-	char_to_str[0] = *c;
-	char_to_str[1] = '\0';
-	(*index)++;
-	temp = ft_strjoin(*str, char_to_str);
+	key = get_dollar_word(line, size);
+	value = get_elem_env(data->env, key);
+	if (key)
+		free(key);
+	temp = ft_strjoin(*str, value);
+	if (value)
+		free(value);
 	free(*str);
 	if (!temp)
 		return (0);

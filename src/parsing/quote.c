@@ -1,6 +1,6 @@
 #include "../../include/minishell.h"
 
-void	quoting_choice(bool *dq, bool *sq, int *index, char c)
+void	quoting_choice(bool *dq, bool *sq, int *i, char c)
 {
 	if ((c == '\'' || c == '"') && !*sq && !*dq)
 	{
@@ -8,8 +8,8 @@ void	quoting_choice(bool *dq, bool *sq, int *index, char c)
 			*sq = true;
 		else if (c == '"' && !*sq)
 			*dq = true;
-		if (index)
-			++(*index);
+		if (i)
+			++(*i);
 	}
 	else if ((c == '\'' || c == '"'))
 	{
@@ -17,8 +17,8 @@ void	quoting_choice(bool *dq, bool *sq, int *index, char c)
 			*sq = false;
 		else if (c == '"' && !*sq && *dq)
 			*dq = false;
-		if (index)
-			++(*index);
+		if (i)
+			++(*i);
 	}
 }
 

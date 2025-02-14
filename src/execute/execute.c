@@ -41,19 +41,11 @@ static void	wait_all(t_data *data)
 	len = len_command(temp);
 	while (len--)
 	{
-		pid = waitpid(g_signal_pid, &status, 0);
-		if (pid == -1)
-		{
-			perror("waitpid");
-			data->exit_code = 1;
-			break ;
-		}
+		pid = waitpid(0, &status, 0);
 		if (pid == g_signal_pid)
 		{
 			if (WIFEXITED(status))
 				data->exit_code = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))
-				data->exit_code = 128 + WTERMSIG(status);
 		}
 		if (temp->outfile >= 0)
 			close(temp->outfile);

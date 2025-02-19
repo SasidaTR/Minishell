@@ -16,13 +16,13 @@
 
 # define BUFFER_SIZE	1
 
-# define INPUT			1	//"<"
-# define HEREDOC		2	//"<<"
-# define TRUNC			3	//">"
-# define APPEND			4	//">>"
-# define PIPE			5	//"|"
-# define CMD			6	//"|"
-# define ARG			7	//"|"
+# define INPUT			1	// <
+# define HEREDOC		2	// <<
+# define TRUNC			3	// >
+# define APPEND			4	// >>
+# define PIPE			5	// |
+# define CMD			6	// |
+# define ARG			7	// |
 
 # define ERR_MALLOC		"malloc error\n"
 # define ERR_PIPE		"pipe error\n"

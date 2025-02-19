@@ -21,8 +21,8 @@
 # define TRUNC			3	// >
 # define APPEND			4	// >>
 # define PIPE			5	// |
-# define CMD			6	// |
-# define ARG			7	// |
+# define CMD			6	// CMD
+# define ARG			7	// ARG
 
 # define ERR_MALLOC		"malloc error\n"
 # define ERR_PIPE		"pipe error\n"

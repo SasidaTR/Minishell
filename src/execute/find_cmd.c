@@ -34,8 +34,7 @@ static char	*create_paths(t_list *env, int len)
 static char	*command_not_found(char *sample)
 {
 	write(2, sample, ft_strlen(sample));
-	write(2, " : No such file or directory\n",
-		ft_strlen(" : No such file or directory\n"));
+	write(2, " : command not found\n", 21);
 	return (NULL);
 }
 

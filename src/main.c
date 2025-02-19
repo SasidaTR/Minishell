@@ -77,7 +77,7 @@ int	main(int argc, char **argv, char **env)
 		free_all(&data, ERR_MALLOC, EXT_MALLOC);
 	while (1)
 	{
-		command = readline("minishell> ");
+		command = readline("> ");
 		if (!command)
 			free_all(&data, NULL, data.exit_code);
 		if (empty_line(command))

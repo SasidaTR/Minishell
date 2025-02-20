@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: earnera <earnera@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/20 12:41:23 by earnera           #+#    #+#             */
+/*   Updated: 2025/02/20 12:41:43 by earnera          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
-//syntax
 static bool	syntax(char *str)
 {
 	int	i;
@@ -17,7 +28,6 @@ static bool	syntax(char *str)
 	return (true);
 }
 
-//checks if identifier already in env
 static int	exist(char *str, t_list *env)
 {
 	int		i;
@@ -44,35 +54,6 @@ static int	exist(char *str, t_list *env)
 	}
 	return (-1);
 }
-
-//static bool	unset(char *str, t_list **env)
-//{
-//	int		pos;
-//	int		i;
-//	t_list	**temp;
-
-//	if (!str || !(*str))
-//		return (false);
-//	if (!syntax(str))
-//	{
-//		print_error("unset: invalid identifier\n");
-//		return (true);
-//	}
-//	pos = exist(str, (*env));
-//	if (pos == -1)
-//		return (false);
-//	temp = env;
-//	i = 0;
-//	while (i++ < pos)
-//		(*env) = (*env)->next;
-//	(*env)->prev->next = (*env)->next;
-//	(*env)->next->prev = (*env)->prev;
-//	free((*env)->str);
-//	free((*env));
-//	(*env) = NULL;
-//	env = temp;
-//	return (false);
-//}
 
 static void	check_env(t_list *temp, t_list **env)
 {

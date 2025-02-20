@@ -15,19 +15,20 @@ static void	parent_process(t_data *data, t_command *commands, int *pip)
 
 static bool	execute_command(t_data *data, t_command *commands, int *pip)
 {
-	g_signal_pid = fork();
-	if (g_signal_pid < 0)
-		free_all(data, ERR_FORK, EXT_FORK);
-	else if (!g_signal_pid)
-	{
-		if (commands->command_param && commands->command_param[0])
-			child_process(data, commands, pip);
-		else
-			free_all(data, NULL, 0);
-	}
-	else
-		parent_process(data, commands, pip);
-	return (true);
+	pid_t pid = fork();
+    if (pid < 0)
+        free_all(data, ERR_FORK, EXT_FORK);
+    else if (pid == 0)
+    {
+        if (commands->command_param && commands->command_param[0])
+            child_process(data, commands, pip);
+        else
+            free_all(data, NULL, 0);
+    }
+    else
+        parent_process(data, commands, pip);
+
+    return (true);
 }
 
 static void	wait_all(t_data *data)
@@ -42,7 +43,7 @@ static void	wait_all(t_data *data)
 	while (len--)
 	{
 		pid = waitpid(0, &status, 0);
-		if (pid == g_signal_pid)
+		if (pid == g_signal)
 		{
 			if (WIFEXITED(status))
 				data->exit_code = WEXITSTATUS(status);

@@ -11,7 +11,7 @@ static void	handle_sigint(int code)
 	(void)code;
 	printf("\n");
 	clear_rl_line();
-	if (g_signal_pid == 0)
+	if (g_signal == 0)
 		rl_redisplay();
 }
 

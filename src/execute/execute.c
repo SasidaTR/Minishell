@@ -27,10 +27,12 @@ static void	parent_process(t_data *data, t_command *commands, int *pip)
 
 static bool	execute_command(t_data *data, t_command *commands, int *pip)
 {
-	g_signal_pid = fork();
-	if (g_signal_pid < 0)
+	pid_t	pid;
+
+	pid = fork();
+	if (pid < 0)
 		free_all(data, ERR_FORK, EXT_FORK);
-	else if (!g_signal_pid)
+	else if (pid == 0)
 	{
 		if (commands->command_param && commands->command_param[0])
 			child_process(data, commands, pip);
@@ -38,14 +40,17 @@ static bool	execute_command(t_data *data, t_command *commands, int *pip)
 			free_all(data, NULL, 0);
 	}
 	else
+	{
+		g_signal = pid;
 		parent_process(data, commands, pip);
+	}
 	return (true);
 }
 
 static void	wait_all(t_data *data)
 {
 	int			status;
-	int			pid;
+	pid_t		pid;
 	int			len;
 	t_command	*temp;
 
@@ -53,18 +58,16 @@ static void	wait_all(t_data *data)
 	len = len_command(temp);
 	while (len--)
 	{
-		pid = waitpid(0, &status, 0);
-		if (pid == g_signal_pid)
+		pid = waitpid(-1, &status, 0);
+		if (pid == g_signal)
 		{
 			if (WIFEXITED(status))
 				data->exit_code = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				data->exit_code = 128 + WTERMSIG(status);
 		}
-		if (temp->outfile >= 0)
-			close(temp->outfile);
-		if (temp->infile >= 0)
-			close(temp->infile);
-		temp = temp->next;
 	}
+	g_signal = 0;
 }
 
 bool	is_builtin(char *command)

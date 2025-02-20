@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-pid_t	g_signal_pid;
+pid_t	g_signal;
 
 bool	empty_line(char *line)
 {
@@ -75,7 +75,7 @@ void	init_data(int argc, char **argv, t_data *data)
 	data->exit_code = 0;
 	data->pip[0] = -1;
 	data->pip[1] = -1;
-	g_signal_pid = 0;
+	g_signal = 0;
 	signals();
 }
 
@@ -89,7 +89,7 @@ int	main(int argc, char **argv, char **env)
 		free_all(&data, ERR_MALLOC, EXT_MALLOC);
 	while (1)
 	{
-		command = readline("> ");
+		command = readline("mini> ");
 		if (!command)
 			free_all(&data, NULL, data.exit_code);
 		if (empty_line(command))
@@ -101,7 +101,7 @@ int	main(int argc, char **argv, char **env)
 			free_all(&data, ERR_PIPE, EXT_PIPE);
 		free_command(&data.commands);
 		free_token(&data.token);
-		g_signal_pid = 0;
+		g_signal = 0;
 	}
 	rl_clear_history();
 	free_all(&data, NULL, -1);

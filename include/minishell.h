@@ -44,7 +44,7 @@
 # define EXT_PIPE		1
 # define EXT_FORK		1
 
-extern pid_t	g_signal_pid;
+extern pid_t	g_signal;
 
 typedef struct s_command
 {
